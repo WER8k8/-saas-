@@ -689,6 +689,28 @@ def update_inquiry_status(
     inquiry.status = new_status
     db.commit()
     db.refresh(inquiry)
+
+    # 挂接经验环 (Evolution Engine)：成单与流失沉淀
+    try:
+        from app.services.acquisition.experience_feed import record_ops_win, record_ops_loss
+        if new_status in ("closed", "won", "deal"):
+            record_ops_win(
+                db,
+                tenant_id=str(getattr(inquiry, "tenant_id", "") or ""),
+                inquiry_id=str(inquiry.id),
+                note=f"询盘状态推进至 {new_status}",
+            )
+        elif new_status in ("lost", "rejected", "spam"):
+            record_ops_loss(
+                db,
+                tenant_id=str(getattr(inquiry, "tenant_id", "") or ""),
+                inquiry_id=str(inquiry.id),
+                reasons=[new_status],
+                note=f"询盘标记为流失/无效 ({new_status})",
+            )
+    except Exception:
+        pass
+
     return success_response(data=_safe_inquiry_dict(inquiry), message="状态已更新")
 
 

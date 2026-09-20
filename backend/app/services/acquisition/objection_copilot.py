@@ -180,12 +180,36 @@ class ObjectionCopilot:
     }
 
     @classmethod
-    def get_objection_solution(cls, objection_key: str) -> Dict[str, Any]:
-        """获取指定外贸抗拒场景的专业反击战术与话术。"""
+    def get_objection_solution(
+        cls,
+        objection_key: str,
+        *,
+        db: Optional[Any] = None,
+        tenant_id: str = "",
+        inquiry_id: str = "",
+    ) -> Dict[str, Any]:
+        """获取指定外贸抗拒场景的专业反击战术与话术，并异步记录至进化环。"""
         clean_key = (objection_key or "price_high").strip().lower()
         solution = cls.OBJECTIONS.get(clean_key)
         if not solution:
             solution = cls.OBJECTIONS["price_high"]
+
+        # 挂接经验环 (Evolution Engine)，沉淀谈判战术调用记录
+        if db is not None:
+            try:
+                from app.services.acquisition.experience_feed import record_acquisition_event
+                record_acquisition_event(
+                    db,
+                    tenant_id=tenant_id or "default_tenant",
+                    event="objection_consulted",
+                    inquiry_id=inquiry_id or "",
+                    success=True,
+                    detail=f"objection={clean_key}|strategy={solution.get('name_cn', '')}",
+                    executor_id="objection_copilot",
+                )
+            except Exception:
+                pass
+
         return solution
 
     @classmethod
@@ -200,3 +224,4 @@ class ObjectionCopilot:
             }
             for v in cls.OBJECTIONS.values()
         ]
+

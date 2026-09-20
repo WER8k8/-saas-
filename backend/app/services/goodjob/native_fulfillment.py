@@ -378,6 +378,21 @@ def sync_fulfillment_stage(
                     db.commit()
                     db.refresh(order)
                     result["transition_path"] = path
+
+                    # 挂接经验环 (Evolution Engine)：履约里程碑沉淀
+                    if target in ("completed", "confirmed", "final_payment_received"):
+                        try:
+                            from app.services.acquisition.experience_feed import record_ops_win
+                            record_ops_win(
+                                db,
+                                tenant_id=str(getattr(order, "tenant_id", "") or tenant_id or ""),
+                                inquiry_id=str(getattr(order, "inquiry_id", "") or order.order_number or ""),
+                                amount=float(getattr(order, "total_amount", 0.0) or 0.0),
+                                currency=str(getattr(order, "currency", "USD") or "USD"),
+                                note=f"GoodJob 履约状态推进至 {target}",
+                            )
+                        except Exception:
+                            pass
                 except Exception as exc:  # noqa: BLE001
                     db.rollback()
                     return {**result, "error": f"order_update_failed:{exc}"}

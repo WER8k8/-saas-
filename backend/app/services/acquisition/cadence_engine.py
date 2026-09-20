@@ -59,6 +59,61 @@ class OutboundCadenceEngine:
         },
     }
 
+    # WhatsApp 账号阶梯暖机调度表 (天数阈值, 每日最大发送上限)
+    WARMUP_LADDER = [
+        (3, 10),    # 前 3 天：严控 ≤ 10 条/日
+        (7, 25),    # 第 4~7 天：放宽至 ≤ 25 条/日
+        (14, 60),   # 第 8~14 天：放宽至 ≤ 60 条/日
+        (30, 120),  # 第 15~30 天：放宽至 ≤ 120 条/日
+        (999, 200), # 30 天后：成熟账号标准额度 200 条/日
+    ]
+
+    @classmethod
+    def get_daily_wa_limit(cls, account_age_days: int) -> int:
+        """根据 WhatsApp 账号注册/接入天数，计算今日安全投递上限。"""
+        days = max(0, int(account_age_days or 0))
+        for threshold, limit in cls.WARMUP_LADDER:
+            if days <= threshold:
+                return limit
+        return 200
+
+    @classmethod
+    def warmup_gate(
+        cls,
+        phone_number: str,
+        account_registered_date: Optional[datetime.date] = None,
+        sent_today_count: int = 0,
+    ) -> Dict[str, Any]:
+        """WhatsApp 账号安全暖机门禁校验。"""
+        if account_registered_date is None:
+            account_registered_date = datetime.date.today()
+
+        age_days = max(0, (datetime.date.today() - account_registered_date).days)
+        daily_limit = cls.get_daily_wa_limit(age_days)
+        sent = max(0, int(sent_today_count or 0))
+        remaining = max(0, daily_limit - sent)
+        is_safe = sent < daily_limit
+
+        warning: Optional[str] = None
+        if not is_safe:
+            warning = f"🛑 今日发送已达账号安全阈值 ({sent}/{daily_limit})，系统已启动过载熔断防封禁机制"
+        elif age_days <= 3:
+            warning = f"⚠ 新账号（第 {age_days} 天）：处于严格防封禁保护期，今日上限 {daily_limit} 条，剩余额度 {remaining} 条"
+        elif age_days <= 7:
+            warning = f"📈 暖机爬坡期（第 {age_days} 天）：今日上限 {daily_limit} 条，剩余额度 {remaining} 条"
+
+        masked_phone = phone_number[-4:].rjust(len(phone_number), "*") if len(phone_number) >= 7 else phone_number
+
+        return {
+            "phone_masked": masked_phone,
+            "account_age_days": age_days,
+            "daily_limit": daily_limit,
+            "sent_today": sent,
+            "remaining_today": remaining,
+            "safe_to_send": is_safe,
+            "warning": warning,
+        }
+
     @classmethod
     def generate_cadence_plan(
         cls,

@@ -27,6 +27,46 @@ class AIPitchStudio:
 
     SUPPORTED_LANGUAGES = ["en", "ar", "es", "ru", "pt", "fr"]
 
+    # Spintax 破冰反垃圾变体词库
+    SPINTAX: Dict[str, List[str]] = {
+        "greeting": [
+            "Dear",
+            "Hi",
+            "Hello",
+            "Good day,",
+            "Greetings,",
+            "Esteemed",
+        ],
+        "opener": [
+            "We noticed your company is actively expanding procurement in",
+            "Our export desk came across your verified projects sourcing",
+            "We have been closely following your commercial build developments in",
+            "As an accredited manufacturer with direct shipments, we are reaching out regarding",
+        ],
+        "closer": [
+            "Looking forward to exploring synergies with your procurement team.",
+            "We would welcome the opportunity to submit our technical qualification portfolio.",
+            "A brief review of our spec sheet could significantly optimize your container costs.",
+            "Please feel free to request our physical sample binder at zero cost.",
+        ],
+    }
+
+    @classmethod
+    def _spin(cls, key: str) -> str:
+        """随机选取一个 Spintax 变体以打破模板相似度。"""
+        import random
+        opts = cls.SPINTAX.get(key) or [""]
+        return random.choice(opts)
+
+    @classmethod
+    def apply_spintax(cls, text: str) -> str:
+        """支持 {word1|word2|word3} 语法随机展开，防反垃圾指纹识别。"""
+        import random, re
+        pattern = re.compile(r"\{([^{}]+)\}")
+        while pattern.search(text):
+            text = pattern.sub(lambda m: random.choice(m.group(1).split("|")), text)
+        return text
+
     @classmethod
     def generate_pitch(
         cls,
