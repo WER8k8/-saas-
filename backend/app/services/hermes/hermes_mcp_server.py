@@ -23,13 +23,21 @@ class HermesMCPServer:
 
     @classmethod
     def get_tool_manifest(cls) -> List[Dict[str, Any]]:
-        return [
+        tools = [
             {
                 "name": "hermes_orchestrate",
                 "description": "Generate and execute a multi-agent deterministic TaskGraph for complex B2B workflows.",
-                "input_schema": GeneratePlanToolInput.model_json_schema()
+                "input_schema": GeneratePlanToolInput.model_json_schema(),
             }
         ]
+        # Deskcomm 不重叠能力并入：CRM Sales-OS tools（操作优丁，非第二 CRM 运行时）
+        try:
+            from app.services.deskcomm.crm_sales_os_tools import CrmSalesOsTools
+
+            tools.extend(CrmSalesOsTools.get_tool_manifest())
+        except Exception:  # noqa: BLE001
+            pass
+        return tools
 
     @classmethod
     async def call_tool(cls, name: str, arguments: Dict[str, Any], db=None) -> Dict[str, Any]:
@@ -37,7 +45,13 @@ class HermesMCPServer:
 
         仅当传入 db（SQLAlchemy Session）时拆解并翻库；无 db 时如实返回 not_configured，
         绝不再返回硬编码假 plan_id（历史假桩已废弃）。
+        CRM 工具（crm_*）路由到 deskcomm.crm_sales_os_tools。
         """
+        if name.startswith("crm_"):
+            from app.services.deskcomm.crm_sales_os_tools import CrmSalesOsTools
+
+            return await CrmSalesOsTools.call_tool(name, arguments or {}, db=db)
+
         if name != "hermes_orchestrate":
             raise ValueError(f"Unknown Hermes MCP tool: {name}")
 
