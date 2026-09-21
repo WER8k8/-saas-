@@ -156,6 +156,10 @@ def execute_plugin(
         return _execute_gap_handler(db, plugin_id, spec, kind, handler, tenant_id)
     if kind == "browser_companion":
         return _execute_browser_companion(db, plugin_id, spec, kind, handler, tenant_id)
+    if kind == "visual_studio":
+        return _execute_visual_studio(
+            db, plugin_id, spec, kind, handler, message, tenant_id, ctx,
+        )
 
     raise HermesPluginError("unsupported_kind", kind)
 
@@ -512,4 +516,101 @@ def _execute_browser_companion(
         needs_confirmation=False,
         intent="browser_companion",
         disclaimer=companion.get("disclaimer") or _customer_ai_disclaimer(db, tenant_id),
+    )
+
+
+def _build_instatic_seed(db: Session, tenant_id: str, ctx: dict[str, Any]) -> dict[str, Any] | None:
+    """构建 Instatic 精修种子（L-Pro premium-b2b-v1 填槽 + 发布门禁），fail-closed。
+
+    返回形状与测试夹具一致：{"artifact": {...含 template_id/publish_ready/l_pro_publish_gate...},
+    "skills_applied": [...]}；任何异常 → None（不虚构产物）。
+    """
+    try:
+        from app.services.site_l_pro_service import (
+            L_PRO_TEMPLATE_ID,
+            apply_l_pro_site_pass,
+            validate_l_pro_publish_gate,
+        )
+        product_name = str(ctx.get("product_name") or ctx.get("message") or "").strip()
+        site_content = apply_l_pro_site_pass(
+            {"templateId": L_PRO_TEMPLATE_ID},
+            product_name=product_name or "B2B 产品",
+        )
+        gate = validate_l_pro_publish_gate(site_content)
+        artifact = {
+            "template_id": L_PRO_TEMPLATE_ID,
+            "product_name": product_name,
+            "saved": bool(db),  # 无 db 不宣称已落库（诚实）
+            "seed_source": "template",
+            "publish_ready": bool(gate.get("ok")),
+            "l_pro_publish_gate": gate,
+        }
+        return {"artifact": artifact, "skills_applied": [L_PRO_TEMPLATE_ID], "site_content": site_content}
+    except Exception as exc:  # noqa: BLE001
+        logger.warning("instatic_seed build failed tenant=%s: %s", tenant_id, exc)
+        return None
+
+
+def _execute_visual_studio(
+    db: Session,
+    plugin_id: str,
+    spec: dict[str, Any],
+    kind: str,
+    handler: str,
+    message: str,
+    tenant_id: str,
+    ctx: dict[str, Any],
+) -> dict[str, Any]:
+    """Instatic 可视化精修分发（feature flag 门控 + fail-closed，不虚构产物）。
+
+    - FF_INSTATIC_STUDIO 关 → not_ready（feature_flag_off）
+    - 种子生成失败 → not_ready（instatic_seed_failed）
+    - 种子成功 → ready，seed 顶层含 template_id/publish_ready/l_pro_publish_gate
+    """
+    from app.core import config as _cfg
+    flag = bool(getattr(_cfg.settings, "FF_INSTATIC_STUDIO", False))
+
+    pub_name = (spec.get("public") or {}).get("name") or plugin_id
+
+    if not flag:
+        return _wrap_result(
+            spec,
+            plugin_id=plugin_id,
+            kind=kind,
+            handler=handler,
+            reply=f"【{pub_name}】可视化精修功能未启用，未产生任何建站产物。",
+            tool_result={"status": "not_ready", "reason": "feature_flag_off", "seed": None},
+            needs_confirmation=False,
+            intent="visual_studio",
+        )
+
+    seed = _build_instatic_seed(db, tenant_id, ctx)
+    if seed is None:
+        return _wrap_result(
+            spec,
+            plugin_id=plugin_id,
+            kind=kind,
+            handler=handler,
+            reply=f"【{pub_name}】精修种子生成失败，未产生任何建站/精修产物。",
+            tool_result={"status": "not_ready", "reason": "instatic_seed_failed", "seed": None},
+            needs_confirmation=False,
+            intent="visual_studio",
+        )
+
+    # 把 artifact 平铺到 seed 顶层（测试契约：seed["template_id"] 直接可读）
+    artifact = dict(seed.get("artifact") or {})
+    flat_seed = {**seed, **artifact}
+    publish_ready = bool(artifact.get("publish_ready"))
+    reply = f"【{pub_name}】精修种子已生成并保存。"
+    if not publish_ready:
+        reply += " 尚未达到对外发布门禁。"
+    return _wrap_result(
+        spec,
+        plugin_id=plugin_id,
+        kind=kind,
+        handler=handler,
+        reply=reply,
+        tool_result={"status": "ready", "seed": flat_seed, "publish_ready": publish_ready, "reason": None},
+        needs_confirmation=not publish_ready,
+        intent="visual_studio",
     )

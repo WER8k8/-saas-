@@ -2,9 +2,9 @@
   "ok": true,
   "task": "NO-FAKE-DELIVERY-DEEP",
   "scanned": {
-    "backend_py": 1292,
+    "backend_py": 1348,
     "frontend_vue": 417,
-    "frontend_ts": 155
+    "frontend_ts": 157
   },
   "p0_count": 0,
   "p1_count": 0,
@@ -61,7 +61,7 @@
     },
     {
       "file": "backend\\app\\services\\ubrain\\whatsapp_prospect_service.py",
-      "line": 466,
+      "line": 520,
       "label": "响应体含 mock:true（须确认生产门控）",
       "severity": "P2",
       "snippet": "\"mock\": True,"

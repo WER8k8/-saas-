@@ -101,8 +101,8 @@ const columns = [
 ]
 
 function getIcon(type: string): string {
-  const icons: Record<string, string> = { product: '📦', inquiry: '💬', content: '📝' }
-  return icons[type] || '📄'
+  const icons: Record<string, string> = { product: '产', inquiry: '询', content: '文' }
+  return icons[type] || '档'
 }
 
 function getTypeColor(type: string): string {

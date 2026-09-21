@@ -123,6 +123,10 @@ const routes: RouteRecordRaw[] = [
         component: () => import('@/views/client/today-three.vue'),
         meta: { title: '今日三步' },
       },
+      // 死页归位：未接线视图 → 指向可用能力（避免 404 / 孤岛）
+      { path: 'export-quote', redirect: '/client/trade-tools', meta: { title: '出口报价（并入外贸工具）' } },
+      { path: 'forum-qa', redirect: '/client/assistant', meta: { title: '论坛问答（并入助手）' } },
+      { path: 'video-studio-project-panel', redirect: '/client/video-studio', meta: { title: '视频项目面板' } },
       { path: 'dashboard', name: 'ClientDashboard', component: () => import('@/views/client/dashboard.vue'), meta: { title: '工作台' } },
       { path: 'tasks', name: 'ClientHermesTasks', component: () => import('@/views/client/hermes-tasks.vue'), meta: { title: 'Hermes 任务', privileged: false } },
      { path: 'traffic', name: 'ClientTrafficBoard', component: () => import('@/views/client/traffic-board.vue'), meta: { title: '流量看板' } },
@@ -463,6 +467,77 @@ const routes: RouteRecordRaw[] = [
             name: 'AdminPlatformCredentials',
             component: () => import('@/views/admin/platform-credentials.vue'),
             meta: { title: '平台凭证', icon: 'KeyOutlined' },
+          },
+          // ── 死页接线：进化/n8n/建站/DeerFlow 监控（菜单可直达） ──
+          {
+            path: 'evolution',
+            name: 'AdminEvolutionEngine',
+            component: () => import('@/views/evolution/Dashboard.vue'),
+            meta: { title: 'AI 进化引擎', icon: 'BulbOutlined' },
+          },
+          {
+            path: 'n8n/workflows',
+            name: 'AdminN8nWorkflows',
+            component: () => import('@/views/n8n/Workflows.vue'),
+            meta: { title: 'n8n 工作流', icon: 'ApiOutlined' },
+          },
+          {
+            path: 'sites/build',
+            name: 'AdminSitesBuild',
+            component: () => import('@/views/sites/SiteBuild.vue'),
+            meta: { title: '一键建站', icon: 'RocketOutlined' },
+          },
+          {
+            path: 'deerflow/monitor',
+            name: 'AdminDeerflowMonitor',
+            component: () => import('@/views/deerflow/Monitor.vue'),
+            meta: { title: 'DeerFlow 监控', icon: 'MonitorOutlined' },
+          },
+          // Paperclip 短路径（与 platformShellMenu /admin/paperclip/* 对齐）
+          {
+            path: 'paperclip/dashboard',
+            name: 'PaperclipHub',
+            component: () => import('@/views/admin/paperclip/dashboard.vue'),
+            meta: { title: 'Paperclip 总控', icon: 'ClusterOutlined' },
+          },
+          {
+            path: 'paperclip/org-chart',
+            name: 'PaperclipOrg',
+            component: () => import('@/views/admin/paperclip/org-chart.vue'),
+            meta: { title: '组织图谱', icon: 'ApartmentOutlined' },
+          },
+          {
+            path: 'paperclip/goals',
+            name: 'PaperclipGoalsShort',
+            component: () => import('@/views/admin/paperclip/goals.vue'),
+            meta: { title: '目标管理', icon: 'AimOutlined' },
+          },
+          {
+            path: 'paperclip/heartbeats',
+            name: 'PaperclipHeartbeatsShort',
+            component: () => import('@/views/admin/paperclip/heartbeats.vue'),
+            meta: { title: '心跳巡检', icon: 'HeartOutlined' },
+          },
+          {
+            path: 'paperclip/approvals',
+            name: 'PaperclipApprovalsShort',
+            component: () => import('@/views/admin/paperclip/approvals.vue'),
+            meta: { title: 'Paperclip 审批', icon: 'AuditOutlined' },
+          },
+          // 系统健康 / 物流：与菜单路径对齐的短路径别名
+          {
+            path: 'system-health',
+            name: 'AdminSystemHealthAlias',
+            component: () => import('@/views/system-health/index.vue'),
+            redirect: { name: 'SystemHealthDashboard' },
+            meta: { title: '系统健康压测', icon: 'HeartOutlined' },
+          },
+          {
+            path: 'logistics',
+            name: 'AdminLogisticsAlias',
+            component: () => import('@/views/logistics/index.vue'),
+            redirect: { name: 'LogisticsDashboard' },
+            meta: { title: '智能物流', icon: 'CarOutlined' },
           },
           // 附属执行台（SYSTEM-LOCK-02 第⑤⑥子系统）：路径必须与
           // constants/annexModules.ts 的 adminPath 及 platformShellMenu 的菜单项一致，

@@ -47,7 +47,7 @@
         <!-- 外贸专属自适应快捷卡片 -->
         <div class="yd-copilot-quick-grid">
           <button type="button" class="quick-card" @click="handleQuickAction('inquiry')">
-            <span class="quick-icon">🌐</span>
+            <span class="quick-icon">译</span>
             <div class="quick-text">
               <span class="quick-title">询盘多语言翻译</span>
               <span class="quick-desc">阿语/西语/俄语精准意图提取</span>
@@ -55,7 +55,7 @@
           </button>
 
           <button type="button" class="quick-card" @click="handleQuickAction('quote')">
-            <span class="quick-icon">📊</span>
+            <span class="quick-icon">价</span>
             <div class="quick-text">
               <span class="quick-title">BOQ 22 参数核价</span>
               <span class="quick-desc">集装箱配载与定金自动折算</span>
@@ -63,7 +63,7 @@
           </button>
 
           <button type="button" class="quick-card" @click="handleQuickAction('pi')">
-            <span class="quick-icon">📑</span>
+            <span class="quick-icon">单</span>
             <div class="quick-text">
               <span class="quick-title">PI / CI 单证生成</span>
               <span class="quick-desc">7 步履约单证一键套打</span>
@@ -71,7 +71,7 @@
           </button>
 
           <button type="button" class="quick-card" @click="handleQuickAction('sentiment')">
-            <span class="quick-icon">🎯</span>
+            <span class="quick-icon">策</span>
             <div class="quick-text">
               <span class="quick-title">买家情绪与谈判策略</span>
               <span class="quick-desc">100 种脾气多轮应策建议</span>

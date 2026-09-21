@@ -77,17 +77,17 @@ const fontLevelLabel = computed(() => {
 })
 
 const quickPersonas = [
-  { id: 'beginner' as PersonaId, label: '新手模式', icon: '🌱' },
-  { id: 'standard' as PersonaId, label: '标准模式', icon: '⚡' },
-  { id: 'power' as PersonaId, label: '专业模式', icon: '🔧' },
-  { id: 'accessibility' as PersonaId, label: '大字/无障碍', icon: '👁' },
+  { id: 'beginner' as PersonaId, label: '新手模式', icon: '新' },
+  { id: 'standard' as PersonaId, label: '标准模式', icon: '标' },
+  { id: 'power' as PersonaId, label: '专业模式', icon: '专' },
+  { id: 'accessibility' as PersonaId, label: '大字/无障碍', icon: '易' },
 ]
 
 const quickScenarios = [
-  { mode: 'office' as ScenarioMode, label: '办公', icon: '🖥' },
-  { mode: 'mobile-field' as ScenarioMode, label: '外出', icon: '📱' },
-  { mode: 'exhibition' as ScenarioMode, label: '展会', icon: '🏛' },
-  { mode: 'focus' as ScenarioMode, label: '专注', icon: '🎯' },
+  { mode: 'office' as ScenarioMode, label: '办公', icon: '办' },
+  { mode: 'mobile-field' as ScenarioMode, label: '外出', icon: '外' },
+  { mode: 'exhibition' as ScenarioMode, label: '展会', icon: '展' },
+  { mode: 'focus' as ScenarioMode, label: '专注', icon: '专' },
 ]
 </script>
 

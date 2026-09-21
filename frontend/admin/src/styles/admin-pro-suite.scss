@@ -1,0 +1,508 @@
+/**
+ * YouDing Admin · 全套专业化层（2026-09-20）
+ * 上游：docs/超管后台设计与配色视觉统一规范 + 微交互选型 + 付费转化设计原则
+ * 性质：增补层 —— 壳层材质在底层，文字清新，滚动条/图标/转场/动效统一门禁
+ * 送检：cert-watermark 模式下关闭流光动画，只保留静态描边与实底可读性
+ */
+
+:root {
+  --uj-p-ink: #122622;
+  --uj-p-ink-2: #1c322d;
+  --uj-p-text: #4d6561;
+  --uj-p-text-3: #7a918d;
+  --uj-p-border: #e3efea;
+  --uj-p-surface: #ffffff;
+  --uj-p-canvas: #eaf4f0;
+  --uj-p-brand-strong: #367469;
+  --uj-p-mint-100: #dcf0eb;
+  --uj-p-mint-300: #a0d6cb;
+  --uj-p-mint-500: #5fb3a3;
+  --uj-p-mint-700: #3f8779;
+  --uj-p-mint-800: #2f6a5f;
+  --uj-p-ease: cubic-bezier(0.25, 0.65, 0.2, 1);
+  --uj-p-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --uj-p-dur: 380ms;
+  --uj-p-dur-soft: 480ms;
+  --uj-p-dur-route: 420ms;
+  --uj-icon-stroke: 1.85;
+  --uj-icon-size: 20px;
+  --uj-scroll-w: 10px;
+}
+
+/* ══════════ 滚动条：马卡龙中粗（全套默认 B） ══════════ */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(74, 155, 140, 0.45) transparent;
+}
+::-webkit-scrollbar {
+  width: var(--uj-scroll-w);
+  height: var(--uj-scroll-w);
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #a0d6cb, #5fb3a3);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #7fc9bb, #4a9b8c);
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+::-webkit-scrollbar-corner { background: transparent; }
+
+/* ══════════ 壳层：材质在底、文字清新 ══════════ */
+.shell,
+.client-shell {
+  color: var(--uj-p-ink);
+}
+
+/* 侧栏：默认真玻璃（非送检）；送检时降级见文末 cert 块 */
+.shell .sidebar {
+  background: rgba(255, 255, 255, 0.52);
+  border-right: 1px solid rgba(255, 255, 255, 0.72);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.5) inset,
+    8px 0 28px rgba(31, 74, 66, 0.05);
+  position: relative;
+  isolation: isolate;
+}
+
+/* 底层背光（壳后） */
+.shell .sidebar::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 100%;
+  background:
+    radial-gradient(80% 40% at 20% 0%, rgba(74, 155, 140, 0.1), transparent 55%),
+    radial-gradient(70% 30% at 80% 100%, rgba(61, 126, 166, 0.06), transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* 边框流光：贴外轮廓，不进内容 */
+.shell .sidebar::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 1px;
+  background: linear-gradient(
+    180deg,
+    rgba(160, 214, 203, 0.15),
+    rgba(74, 155, 140, 0.55),
+    rgba(160, 214, 203, 0.2),
+    rgba(74, 155, 140, 0.4),
+    rgba(160, 214, 203, 0.12)
+  );
+  background-size: 100% 200%;
+  animation: ujSidebarEdge 10s linear infinite;
+  pointer-events: none;
+  z-index: 5;
+}
+
+@keyframes ujSidebarEdge {
+  0% { background-position: 0 0; }
+  100% { background-position: 0 200%; }
+}
+
+.shell .sidebar > * {
+  position: relative;
+  z-index: 1;
+}
+
+.shell .sidebar-brand {
+  border-color: var(--uj-p-border) !important;
+}
+
+/* 品牌字清新 */
+.shell .sidebar-brand span {
+  color: var(--uj-p-ink) !important;
+  font-weight: 500 !important;
+}
+.shell .sidebar-brand span + span,
+.shell .sidebar-brand .text-\[10px\] {
+  color: var(--uj-p-text-3) !important;
+  letter-spacing: 0.08em;
+}
+
+/* 分组标题：更克制 */
+.shell .nav-group-title,
+.shell .submenu-group-label {
+  color: var(--uj-p-text-3) !important;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-size: 11px !important;
+  font-weight: 500 !important;
+}
+
+/* 导航项：高对比文字 */
+.shell .nav-item,
+.shell .submenu-item,
+.shell .nav-flyout .submenu-item {
+  color: var(--uj-p-ink-2) !important;
+  font-weight: 500 !important;
+  border-radius: 10px;
+  min-height: 40px;
+  position: relative;
+  transition:
+    background var(--uj-p-dur) var(--uj-p-ease),
+    color var(--uj-p-dur) var(--uj-p-ease);
+}
+
+.shell .nav-item:hover,
+.shell .submenu-item:hover {
+  background: rgba(232, 245, 240, 0.65) !important;
+}
+
+/* 选中：细指示条 + 浅底 + 深字 */
+.shell .nav-item.active,
+.shell .submenu-item.active,
+.shell .nav-item.has-active-child,
+.shell .nav-item-group.has-active-child .nav-item-main {
+  background: linear-gradient(90deg, #e2f4ee 0%, rgba(226, 244, 238, 0.22) 100%) !important;
+  color: var(--uj-p-mint-800) !important;
+  box-shadow:
+    inset 0 0 0 1px rgba(74, 155, 140, 0.1),
+    0 1px 0 rgba(255, 255, 255, 0.75) inset !important;
+}
+
+.shell .nav-item.active::before,
+.shell .submenu-item.active::before,
+.shell .nav-item-group.has-active-child .nav-item-main::before {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 50%;
+  width: 3px;
+  height: 16px;
+  border-radius: 999px;
+  transform: translateY(-50%);
+  background: linear-gradient(180deg, var(--uj-p-mint-500), var(--uj-p-mint-800));
+  pointer-events: none;
+}
+
+/* 图标容器：Medium 观感 */
+.shell .nav-icon,
+.shell .submenu-item .yd-relief-icon,
+.shell .yd-relief-icon {
+  width: var(--uj-icon-size);
+  height: var(--uj-icon-size);
+  min-width: var(--uj-icon-size);
+  min-height: var(--uj-icon-size);
+}
+
+.shell .nav-text,
+.shell .submenu-item span {
+  letter-spacing: 0.01em;
+}
+
+/* 顶栏：默认半玻璃；送检降级见 cert 块 */
+.shell .main-area > header.topbar,
+.shell .yd-pro-worktabs,
+.shell .yd-context-bar,
+.shell .yd-worktab-bar {
+  background: rgba(255, 255, 255, 0.58);
+  border-color: rgba(255, 255, 255, 0.7);
+  color: var(--uj-p-ink) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+/* 内容区画布 */
+.shell .main-area,
+.shell .content-area {
+  background:
+    linear-gradient(180deg, rgba(234, 244, 240, 0.55), rgba(247, 251, 250, 0.2) 180px, transparent 280px);
+}
+
+/* 内容卡：实底白 + 薄荷灰边 + 极轻阴影 */
+.shell .yd-panel,
+.shell .ant-card,
+.shell .uj-glass-panel,
+.yd-page .yd-panel,
+.yd-page .ant-card {
+  background: var(--uj-p-surface) !important;
+  border: 1px solid var(--uj-p-border) !important;
+  border-radius: 14px !important;
+  box-shadow: 0 1px 2px rgba(31, 74, 66, 0.05) !important;
+  backdrop-filter: none !important;
+  color: var(--uj-p-ink);
+}
+
+.shell .ant-card:hover,
+.shell .yd-panel:hover,
+.yd-page .ant-card:hover {
+  box-shadow: 0 4px 12px rgba(31, 74, 66, 0.08) !important;
+  transform: translateY(-1px);
+  transition: box-shadow var(--uj-p-dur) var(--uj-p-ease), transform var(--uj-p-dur) var(--uj-p-ease);
+}
+
+/* 主按钮：白字 AA 深薄荷 */
+.shell .ant-btn-primary,
+.uj-press.btn-primary,
+.ant-btn-primary:not(.ant-btn-dangerous) {
+  background: var(--uj-p-brand-strong) !important;
+  border-color: var(--uj-p-brand-strong) !important;
+  color: #fff !important;
+  font-weight: 500;
+  border-radius: 10px;
+}
+
+/* ══════════ 动效：#8 按压 + #7 交错 + 软转场 ══════════ */
+.uj-press {
+  transition:
+    transform 160ms var(--uj-p-spring),
+    box-shadow 160ms var(--uj-p-ease),
+    background 160ms ease;
+  will-change: transform;
+}
+.uj-press:not(:disabled):hover { transform: translateY(-1px); }
+.uj-press:not(:disabled):active,
+.ant-btn:not(:disabled):active {
+  transform: scale(0.96) !important;
+  box-shadow: inset 0 2px 6px rgba(31, 74, 66, 0.12) !important;
+  transition-duration: 90ms !important;
+}
+.uj-press:disabled,
+.uj-press[disabled],
+.ant-btn:disabled,
+.ant-btn-loading {
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* 列表/卡片交错入场（容器加 .uj-stagger） */
+.uj-stagger > *,
+.uj-stagger .ant-card,
+.uj-stagger .yd-stats-card,
+.uj-stagger .task {
+  animation: ujSpringIn 420ms var(--uj-p-spring) both;
+}
+.uj-stagger > *:nth-child(1) { animation-delay: 0ms; }
+.uj-stagger > *:nth-child(2) { animation-delay: 40ms; }
+.uj-stagger > *:nth-child(3) { animation-delay: 80ms; }
+.uj-stagger > *:nth-child(4) { animation-delay: 120ms; }
+.uj-stagger > *:nth-child(5) { animation-delay: 160ms; }
+.uj-stagger > *:nth-child(6) { animation-delay: 200ms; }
+.uj-stagger > *:nth-child(7) { animation-delay: 240ms; }
+.uj-stagger > *:nth-child(8) { animation-delay: 280ms; }
+.uj-stagger > *:nth-child(n+9) { animation-delay: 320ms; }
+
+@keyframes ujSpringIn {
+  from { opacity: 0; transform: translateY(10px) scale(0.985); }
+  to { opacity: 1; transform: none; }
+}
+
+/* 路由软转场（layout 内使用） */
+.route-soft-enter-active,
+.route-soft-leave-active {
+  transition:
+    opacity var(--uj-p-dur-route) var(--uj-p-ease),
+    transform var(--uj-p-dur-route) var(--uj-p-ease),
+    filter var(--uj-p-dur-route) var(--uj-p-ease);
+}
+.route-soft-enter-from {
+  opacity: 0;
+  transform: translateY(8px) scale(0.992);
+  filter: blur(2px);
+}
+.route-soft-leave-to {
+  opacity: 0;
+  transform: translateY(-4px) scale(0.996);
+  filter: blur(1px);
+}
+
+/* ══════════ Copilot 快捷卡图标底（去 emoji 后） ══════════ */
+.yd-copilot-slot .quick-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--uj-p-mint-100);
+  color: var(--uj-p-mint-800);
+  font-family: var(--font-num, ui-monospace, monospace);
+  font-size: 0.72rem;
+  font-weight: 500;
+  flex-shrink: 0;
+}
+
+/* ══════════ 真玻璃（默认开启）· 仅送检水印模式降级 ══════════
+   问题：mint-glass-shell 曾对导航/内容全局 backdrop-filter:none，
+   理由是 CertWatermark 半透明采样会重影。
+   事实：送检模式默认关闭（admin_cert_mode 默认非 1）；
+   正常开发/运营应恢复「导航层真玻璃 + 内容层实底」的分工。
+*/
+@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+  /* 壳层画布：玻璃需要彩色底衬，否则退化成白板 */
+  .shell {
+    background:
+      radial-gradient(720px 420px at 6% 0%, rgba(160, 214, 203, 0.42), transparent 52%),
+      radial-gradient(560px 360px at 96% 8%, rgba(191, 220, 245, 0.28), transparent 48%),
+      radial-gradient(420px 280px at 50% 100%, rgba(148, 210, 189, 0.22), transparent 52%),
+      linear-gradient(165deg, #dff5ee 0%, #e8f7f2 42%, #eef8f4 100%) !important;
+  }
+
+  /* L1 导航层 · 真玻璃 thin */
+  .shell .sidebar {
+    background: rgba(255, 255, 255, 0.52) !important;
+    -webkit-backdrop-filter: blur(16px) saturate(160%) !important;
+    backdrop-filter: blur(16px) saturate(160%) !important;
+    border-right: 1px solid rgba(255, 255, 255, 0.72) !important;
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.75),
+      8px 0 32px rgba(31, 74, 66, 0.06) !important;
+  }
+
+  .shell .main-area > header.topbar,
+  .shell .yd-pro-worktabs,
+  .shell .yd-context-bar,
+  .shell .yd-worktab-bar {
+    background: rgba(255, 255, 255, 0.58) !important;
+    -webkit-backdrop-filter: blur(14px) saturate(160%) !important;
+    backdrop-filter: blur(14px) saturate(160%) !important;
+    border-color: rgba(255, 255, 255, 0.7) !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8) !important;
+  }
+
+  /* L3 浮层 · 真玻璃 thick */
+  .shell .ant-modal-content,
+  .shell .ant-modal-header,
+  .shell .ant-drawer-content,
+  .shell .ant-select-dropdown,
+  .shell .ant-dropdown-menu,
+  .shell .nav-flyout {
+    background: rgba(255, 255, 255, 0.74) !important;
+    -webkit-backdrop-filter: blur(28px) saturate(180%) !important;
+    backdrop-filter: blur(28px) saturate(180%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.82) !important;
+    box-shadow:
+      0 8px 32px rgba(31, 74, 66, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
+  }
+
+  /* 菜单仍可读：玻璃上文字用更深墨色 + 可选轻衬 */
+  .shell .nav-item,
+  .shell .submenu-item {
+    color: #16352f !important;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.35);
+  }
+
+  .shell .nav-item.active,
+  .shell .submenu-item.active,
+  .shell .nav-item-group.has-active-child .nav-item-main {
+    background: linear-gradient(90deg, rgba(220, 240, 235, 0.88), rgba(220, 240, 235, 0.28)) !important;
+    -webkit-backdrop-filter: blur(8px) saturate(150%);
+    backdrop-filter: blur(8px) saturate(150%);
+    color: var(--uj-p-mint-800) !important;
+  }
+}
+
+/* 送检水印开启：必须关闭采样模糊，否则对角线水印透成文字重影 */
+.cert-watermark-wrap .shell .sidebar,
+.cert-watermark-wrap .shell .main-area > header.topbar,
+.cert-watermark-wrap .shell .yd-pro-worktabs,
+.cert-watermark-wrap .shell .yd-context-bar,
+.cert-watermark-wrap .shell .yd-worktab-bar,
+.cert-watermark-wrap .shell .ant-modal-content,
+.cert-watermark-wrap .shell .ant-drawer-content,
+.cert-watermark-wrap .shell .ant-select-dropdown,
+.cert-watermark-wrap .shell .ant-dropdown-menu,
+.cert-watermark-wrap .shell .nav-flyout,
+.cert-watermark-wrap .shell .nav-item,
+.cert-watermark-wrap .shell .submenu-item {
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  text-shadow: none !important;
+}
+
+.cert-watermark-wrap .shell .sidebar {
+  background: linear-gradient(180deg, #ffffff 0%, #fbfefd 55%, #f7fbf9 100%) !important;
+  border-right: 1px solid var(--uj-p-border) !important;
+}
+
+.cert-watermark-wrap .shell .main-area > header.topbar,
+.cert-watermark-wrap .shell .yd-pro-worktabs,
+.cert-watermark-wrap .shell .yd-context-bar,
+.cert-watermark-wrap .shell .yd-worktab-bar {
+  background: rgba(255, 255, 255, 0.96) !important;
+}
+
+.cert-watermark-wrap .shell .ant-modal-content,
+.cert-watermark-wrap .shell .ant-drawer-content,
+.cert-watermark-wrap .shell .ant-select-dropdown,
+.cert-watermark-wrap .shell .ant-dropdown-menu,
+.cert-watermark-wrap .shell .nav-flyout {
+  background: #ffffff !important;
+}
+
+.cert-watermark-wrap .shell .nav-item.active,
+.cert-watermark-wrap .shell .submenu-item.active,
+.cert-watermark-wrap .shell .nav-item-group.has-active-child .nav-item-main {
+  background: linear-gradient(90deg, #e2f4ee 0%, rgba(226, 244, 238, 0.22) 100%) !important;
+}
+
+/* 内容层始终实底：数据区对比度与送检安全 */
+.shell .yd-panel,
+.shell .ant-card,
+.shell .uj-glass-panel,
+.yd-page .yd-panel,
+.yd-page .ant-card,
+.shell .content-area,
+.shell .yd-page-body {
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+
+/* 玻璃伪元素：顶光 + 外晕（不依赖 backdrop-filter 也有材质感） */
+.shell .sidebar::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-right: 1px solid transparent;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.35), transparent 28%),
+    linear-gradient(90deg, rgba(74, 155, 140, 0.05), transparent 40%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ══════════ 送检 / 无障碍降级 ══════════ */
+.cert-watermark-wrap .shell .sidebar::after,
+.cert-watermark-wrap .shell .yd-panel,
+.cert-watermark-wrap .shell .ant-card {
+  animation: none !important;
+  backdrop-filter: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .shell .sidebar::after { animation: none !important; }
+  .uj-press:not(:disabled):active,
+  .ant-btn:not(:disabled):active { transform: none !important; }
+  .route-soft-enter-from,
+  .route-soft-leave-to { filter: none; transform: none; }
+  .uj-stagger > * { animation: none !important; opacity: 1 !important; transform: none !important; }
+}
+
+/* 键盘焦点可见 */
+.shell .nav-item:focus-visible,
+.shell .submenu-item:focus-visible,
+.uj-press:focus-visible,
+.ant-btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(74, 155, 140, 0.22) !important;
+}

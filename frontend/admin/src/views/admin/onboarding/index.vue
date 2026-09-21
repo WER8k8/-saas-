@@ -7,7 +7,7 @@
       <!-- Header -->
       <section class="onboarding-header">
         <div>
-          <h1>🚀 欢迎使用优丁</h1>
+          <h1>欢迎使用优丁</h1>
           <p class="subtitle">3 步开启建材出海之旅，约 5 分钟完成</p>
         </div>
         <div class="progress-ring">
@@ -39,17 +39,17 @@
           <div v-if="si === currentStep" class="step-body">
             <div v-for="task in step.tasks" :key="task.id" class="task-item" :class="{ done: task.done }">
               <button class="task-check" @click="completeTask(task.id)">
-                <span v-if="task.done">✅</span>
+                <span v-if="task.done">✓</span>
                 <span v-else>⬜</span>
               </button>
               <span class="task-title">{{ task.title }}</span>
               <button v-if="!task.done && task.id === 'add_product'" class="btn-sample" @click="generateSample">
-                📦 使用示例数据
+                使用示例数据
               </button>
             </div>
             <div class="step-actions">
               <button v-if="si < 2" class="btn-next" @click="currentStep = si + 1">下一步 →</button>
-              <button v-if="si === 2 && progress === 100" class="btn-complete">🎉 完成入驻！</button>
+              <button v-if="si === 2 && progress === 100" class="btn-complete">完成入驻</button>
             </div>
           </div>
         </div>
@@ -57,7 +57,7 @@
 
       <!-- Achievements -->
       <section class="achievements-section">
-        <h2>🏆 成就徽章</h2>
+        <h2>成就徽章</h2>
         <div class="achievement-grid">
           <div v-for="ach in achievements" :key="ach.id" class="achievement-card" :class="{ earned: ach.earned }">
             <span class="ach-icon">{{ ach.icon }}</span>
@@ -70,7 +70,7 @@
       <!-- Sample Data Button -->
       <section class="sample-section">
         <div class="sample-card">
-          <h3>📦 一键生成示例数据</h3>
+          <h3>一键生成示例数据</h3>
           <p>系统将自动创建 3 个产品 + 15 条 FAQ + 中英文内容，让您快速体验完整功能</p>
           <button class="btn-sample-big" @click="generateSample" :loading="generating">
             {{ generating ? '生成中...' : '一键生成示例数据' }}
@@ -136,13 +136,13 @@ async function loadStatus() {
       ]},
     ]
     achievements.value = [
-      { id: 'first_step', title: '第一步', desc: '完成公司基础配置', icon: '🎯', earned: false },
-      { id: 'product_ready', title: '产品就绪', desc: '发布第一个产品', icon: '📦', earned: false },
-      { id: 'faq_master', title: 'FAQ 达人', desc: '添加 5 条以上 FAQ', icon: '❓', earned: false },
-      { id: 'seo_launch', title: 'SEO 启航', desc: '发布第一篇 SEO 文章', icon: '🚀', earned: false },
-      { id: 'geo_pioneer', title: 'GEO 先锋', desc: '完成首次 GEO 探测', icon: '🌍', earned: false },
-      { id: 'first_inquiry', title: '首条询盘', desc: '收到第一条询盘', icon: '💬', earned: false },
-      { id: 'full_loop', title: '全链路打通', desc: '完成全部入驻流程', icon: '🏆', earned: false },
+      { id: 'first_step', title: '第一步', desc: '完成公司基础配置', icon: '起', earned: false },
+      { id: 'product_ready', title: '产品就绪', desc: '发布第一个产品', icon: '品', earned: false },
+      { id: 'faq_master', title: 'FAQ 达人', desc: '添加 5 条以上 FAQ', icon: '问', earned: false },
+      { id: 'seo_launch', title: 'SEO 启航', desc: '发布第一篇 SEO 文章', icon: '搜', earned: false },
+      { id: 'geo_pioneer', title: 'GEO 先锋', desc: '完成首次 GEO 探测', icon: '探', earned: false },
+      { id: 'first_inquiry', title: '首条询盘', desc: '收到第一条询盘', icon: '询', earned: false },
+      { id: 'full_loop', title: '全链路打通', desc: '完成全部入驻流程', icon: '通', earned: false },
     ]
   }
 }

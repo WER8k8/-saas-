@@ -209,9 +209,9 @@ def _outreach_graph(plan_id: str, event_id: str, payload: dict[str, Any]) -> Tas
             degradation="skip",
         ),
         nodes=[
-            # ① 找客：Geo/多渠道线索
+            # ① 找客：专用 lead 执行器（Geo 拓客搜索）
             TaskNode(
-                id="n1", executor="trade_ai_agent", capability="prospect.scrape",
+                id="n1", executor="lead", capability="lead.search",
                 depends_on=[],
                 input={
                     "keyword": keyword,
@@ -238,9 +238,9 @@ def _outreach_graph(plan_id: str, event_id: str, payload: dict[str, Any]) -> Tas
             ),
             # ③ 评分：证据分（无证据不默认假分）
             TaskNode(
-                id="n3", executor="trade_ai_agent", capability="prospect.enrich",
+                id="n3", executor="lead", capability="lead.score",
                 depends_on=["n2"],
-                input_from={"prospects": "n2.output.prospects"},
+                input_from={"prospects": "n2.output.prospects", "leads": "n2.output.prospects"},
                 input={"min_score": int(payload.get("min_score") or 40)},
                 on_fail="skip",
             ),
@@ -429,10 +429,11 @@ def _lead_generation_graph(plan_id: str, event_id: str, payload: dict[str, Any])
         strategy="standard",
         policies=GraphPolicies(max_parallel=2, degradation="skip"),
         nodes=[
-            TaskNode(id="n1", executor="trade_ai_agent", capability="prospect.scrape",
-                     depends_on=[], input={"industry": industry, "country": country, "keyword": industry, "keywords": industry}, on_fail="abort"),
-            TaskNode(id="n2", executor="trade_ai_agent", capability="prospect.enrich",
-                     depends_on=["n1"], input_from={"prospects": "n1.output.leads", "leads": "n1.output.leads"}, on_fail="skip"),
+            # 专用 lead 执行器驱动（Geo 拓客搜索→评分）；让「所有已注册执行器都被 L1 驱动」
+            TaskNode(id="n1", executor="lead", capability="lead.search",
+                     depends_on=[], input={"industry": industry, "country": country, "keyword": industry, "keywords": industry, "limit": 20}, on_fail="abort"),
+            TaskNode(id="n2", executor="lead", capability="lead.score",
+                     depends_on=["n1"], input_from={"leads": "n1.output.leads", "prospects": "n1.output.leads"}, on_fail="skip"),
             TaskNode(id="n3", executor="billing", capability="billing.meter",
                      depends_on=["n2"], input={"event_type": "lead_generated", "scene": "lead_generation"},
                      on_fail="skip"),

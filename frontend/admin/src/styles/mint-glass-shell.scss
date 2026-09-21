@@ -272,7 +272,7 @@
   border-radius: var(--uj-radius-lg);
 }
 
-/* 兜底：内容层禁止磨砂穿透（送检水印开启时尤为重要） */
+/* 内容层禁止磨砂（数据可读性 + 送检安全）；导航/浮层玻璃见 admin-pro-suite.scss */
 .shell .content-area,
 .shell .yd-page-body,
 .client-shell .client-content {
@@ -292,7 +292,7 @@
   -webkit-backdrop-filter: none !important;
 }
 
-/* 送检水印开启时：半透明面板会把对角线水印透出成「文字重影」 */
+/* 送检水印：面板保持不透明；导航真玻璃由 admin-pro-suite 在 .cert-watermark-wrap 下自动降级 */
 .cert-watermark-wrap .shell .admin-dashboard .panel,
 .cert-watermark-wrap .shell .admin-dashboard .topbar.panel,
 .cert-watermark-wrap .yd-page .yd-panel,

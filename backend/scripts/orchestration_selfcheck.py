@@ -542,6 +542,73 @@ def check_multi_executor_registry() -> None:
         record("18. 多核执行器调色盘全集", False, f"{type(exc).__name__}: {str(exc)[:120]}")
 
 
+# ---------------------------------------------------------------------------
+# 19. GoodJob 能力目录双端一致（防漂移 · 批次 C）
+# ---------------------------------------------------------------------------
+def check_goodjob_catalog_drift() -> None:
+    """锁住「加功能 = 两端改数据」不变量：GoodJob TS 目录 与 YouDing JSON 目录 必须一致。
+
+    两侧由同一生成器（gj_catalog 流程）从 agent-api-contracts.ts 派生；若有人只改一侧，
+    此处 FAIL，阻止能力面在 D3 驱动层与接收层之间悄悄漂移。
+    """
+    import json
+    import re
+
+    backend_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    ws_root = os.path.dirname(
+        os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+    )
+    json_path = os.path.join(
+        backend_dir, "app", "services", "hermes", "executors", "gj_capability_catalog.json"
+    )
+    ts_path = os.path.join(
+        ws_root, "_external", "goodjob-crm", "backend", "src", "integrations", "gj-capability-catalog.ts"
+    )
+
+    if not os.path.isfile(json_path):
+        record("19. GoodJob 能力目录双端一致", False, f"YouDing 侧目录缺失: {json_path}")
+        return
+    if not os.path.isfile(ts_path):
+        record("19. GoodJob 能力目录双端一致", False, f"GoodJob 侧目录缺失: {ts_path}")
+        return
+
+    with open(json_path, encoding="utf-8") as fh:
+        cj = json.load(fh)
+    ts = open(ts_path, encoding="utf-8").read()
+
+    j_families = len(cj.get("capabilities", []))
+    j_ops = sum(len(c.get("ops", [])) for c in cj.get("capabilities", []))
+    j_approval = sum(1 for c in cj.get("capabilities", []) if c.get("needs_approval"))
+
+    def _const(name):
+        m = re.search(rf"export const {name} = (\d+);", ts)
+        return int(m.group(1)) if m else None
+
+    t_families = _const("GJ_FAMILIES_TOTAL")
+    t_ops = _const("GJ_OPERATIONS_TOTAL")
+    t_approval = _const("GJ_APPROVAL_FAMILIES")
+
+    mismatches = []
+    if t_families != j_families:
+        mismatches.append(f"families ts={t_families} json={j_families}")
+    if t_ops != j_ops:
+        mismatches.append(f"ops ts={t_ops} json={j_ops}")
+    if t_approval != j_approval:
+        mismatches.append(f"approval ts={t_approval} json={j_approval}")
+    if "capability.invoke" not in ts:
+        mismatches.append("ts 缺 capability.invoke task_type")
+    if "capability.invoke" not in cj.get("task_types", []):
+        mismatches.append("json 缺 capability.invoke task_type")
+
+    ok = not mismatches
+    detail = (
+        f"families={j_families} ops={j_ops} approval={j_approval} "
+        f"| ts={ (t_families, t_ops, t_approval) }"
+        + (f" | 漂移: {', '.join(mismatches)}" if mismatches else " | 双端一致")
+    )
+    record("19. GoodJob 能力目录双端一致", ok, detail)
+
+
 def main() -> int:
     for fn in (
         check_database,
@@ -562,6 +629,7 @@ def main() -> int:
         check_goodjob_crm,
         check_system_registry_and_lock,
         check_multi_executor_registry,
+        check_goodjob_catalog_drift,
     ):
         try:
             fn()

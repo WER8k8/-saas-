@@ -12,10 +12,10 @@
         </div>
         <a-space>
           <a-button @click="fetchRadar" :loading="loading">
-            🔄 立即扫描
+            立即扫描
           </a-button>
           <a-button type="primary" @click="fetchHighRelevance">
-            🎯 只看高相关
+            只看高相关
           </a-button>
         </a-space>
       </section>
@@ -66,8 +66,8 @@
             </a>
             <p v-if="item.summary" class="radar-summary">{{ item.summary.slice(0, 200) }}</p>
             <div class="radar-meta">
-              <span v-if="item.published_at" class="radar-date">📅 {{ formatDate(item.published_at) }}</span>
-              <span v-if="item.technique_extracted" class="radar-technique">🎯 {{ item.technique_extracted }}</span>
+              <span v-if="item.published_at" class="radar-date">{{ formatDate(item.published_at) }}</span>
+              <span v-if="item.technique_extracted" class="radar-technique">{{ item.technique_extracted }}</span>
             </div>
           </div>
 
@@ -115,13 +115,13 @@ const minRelevance = ref(0)
 
 const categoryOptions = [
   { label: '全部', value: 'all' },
-  { label: '📄 论文', value: 'paper' },
-  { label: '📝 行业博客', value: 'blog' },
-  { label: '💬 论坛讨论', value: 'forum' },
-  { label: '🤖 AI 厂商', value: 'ai_vendor' },
-  { label: '✅ 白帽规范', value: 'whitehat' },
-  { label: '🔧 开源工具', value: 'opensource' },
-  { label: '🎯 GEO 专项', value: 'geo_resource' },
+  { label: '论文', value: 'paper' },
+  { label: '行业博客', value: 'blog' },
+  { label: '论坛讨论', value: 'forum' },
+  { label: 'AI 厂商', value: 'ai_vendor' },
+  { label: '白帽规范', value: 'whitehat' },
+  { label: '开源工具', value: 'opensource' },
+  { label: 'GEO 专项', value: 'geo_resource' },
   { label: '🇨🇳 中文社区', value: 'cn_community' },
 ]
 

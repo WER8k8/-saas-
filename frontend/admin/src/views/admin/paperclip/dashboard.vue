@@ -133,19 +133,19 @@
       <a-card title="快速操作" size="small" class="quick-actions">
         <a-space :size="16">
           <a-button type="primary" @click="$router.push('/admin/paperclip/org-chart')">
-            <template #icon><span>👤</span></template>
+            <template #icon><span>员</span></template>
             雇佣 Agent
           </a-button>
           <a-button @click="$router.push('/admin/paperclip/goals')">
-            <template #icon><span>🎯</span></template>
+            <template #icon><span>标</span></template>
             创建目标
           </a-button>
           <a-button @click="$router.push('/admin/paperclip/goals')">
-            <template #icon><span>📋</span></template>
+            <template #icon><span>批</span></template>
             分配任务
           </a-button>
           <a-button :loading="triggering" @click="handleTriggerHeartbeat">
-            <template #icon><span>💓</span></template>
+            <template #icon><span>心</span></template>
             手动心跳
           </a-button>
         </a-space>

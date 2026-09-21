@@ -45,6 +45,8 @@ _API_EXEMPT_PREFIXES: tuple[str, ...] = (
     "/api/v1/admin-bff/logout",
     # 附属项目票据换取与核销（GoodJob / Trade AI）— 跨系统票据协议跳过 CSRF
     "/api/v1/annex",
+    # WhatsApp Plugin 入站事件总线 — 机器 webhook，走共享密钥而非 CSRF
+    "/api/v1/whatsapp-events",
     # 公开找产品端点（Product Finder）— 无需登录，跳过 CSRF
     "/api/v1/matching",
     # 公开 RFQ 提交端点 — 无需登录，跳过 CSRF

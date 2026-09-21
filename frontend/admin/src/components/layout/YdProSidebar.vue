@@ -14,8 +14,8 @@
         </div>
         <transition name="brand-fade">
           <div v-show="!collapsed" class="flex flex-col">
-            <span class="text-[15px] font-semibold text-gray-900 leading-tight">{{ brandTitle }}</span>
-            <span class="text-[10px] text-gray-400 tracking-wide uppercase">{{ brandSubtitle }}</span>
+            <span class="text-[15px] font-medium text-[#122622] leading-tight">{{ brandTitle }}</span>
+            <span class="text-[10px] text-[#7a918d] tracking-[0.08em] uppercase">{{ brandSubtitle }}</span>
           </div>
         </transition>
       </router-link>

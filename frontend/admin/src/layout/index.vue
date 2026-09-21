@@ -68,12 +68,14 @@
         :shell-mode="shellMode"
       />
 
-      <!-- Content：去掉 out-in，避免切页白屏闪；懒加载期间保留上一页，不插 empty 占位 -->
+      <!-- Content：软转场 + keep-alive（admin-pro-suite route-soft） -->
       <div class="content-area" :class="{ 'content-area--wide': isWideContentRoute }">
         <router-view v-slot="{ Component }">
-          <keep-alive v-if="Component" :max="MAX_WORK_TABS">
-            <component :is="Component" :key="normalizeLocationPath(route.path)" />
-          </keep-alive>
+          <transition name="route-soft" mode="out-in">
+            <keep-alive v-if="Component" :max="MAX_WORK_TABS">
+              <component :is="Component" :key="normalizeLocationPath(route.path)" />
+            </keep-alive>
+          </transition>
         </router-view>
       </div>
     </div>

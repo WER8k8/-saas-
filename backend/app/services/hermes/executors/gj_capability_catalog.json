@@ -1,0 +1,1347 @@
+{
+  "source": "agent-api-contracts.ts (GoodJob)",
+  "total_operations": 232,
+  "total_families": 45,
+  "approval_families": 25,
+  "task_types": [
+    "customer_pool.sync",
+    "trade_document.generate",
+    "crm.sync_stage",
+    "capability.invoke"
+  ],
+  "capabilities": [
+    {
+      "family": "agent",
+      "capability": "agent.object",
+      "desc": "Agent 内核：业务对象/记忆/触发器/技能的启停与发布",
+      "risk": "high",
+      "needs_approval": true,
+      "ops": [
+        {
+          "method": "POST",
+          "path": "/api/agent/customer-maintenance/{id}/{action}"
+        },
+        {
+          "method": "POST",
+          "path": "/api/agent/evaluations/run"
+        },
+        {
+          "method": "POST",
+          "path": "/api/agent/knowledge/documents"
+        },
+        {
+          "method": "PATCH",
+          "path": "/api/agent/knowledge/documents/{id}"
+        },
+        {
+          "method": "POST",
+          "path": "/api/agent/knowledge/documents/{id}/{action}"
+        },
+        {
+          "method": "POST",
+          "path": "/api/agent/memories"
+        },
+        {
+          "method": "DELETE",
+          "path": "/api/agent/memories/{id}"
+        },
+        {
+          "method": "PATCH",
+          "path": "/api/agent/memories/{id}"
+        },
+        {
+          "method": "POST",
+          "path": "/api/agent/memories/{id}/activate"
+        },
+        {
+          "method": "POST",
+          "path": "/api/agent/memories/{id}/archive"
+        },
+        {
+          "method": "POST",
+          "path": "/api/agent/outreach-sequences/{id}/{action}"
+        },
+        {
+          "method": "POST",
+          "path": "/api/agent/sales-distillation"
+        },
+        {
+          "method": "POST",
+          "path": "/api/agent/sales-distillation/activations/{id}/pause"
+        },
+        {
+          "method": "POST",
+          "path": "/api/agent/sales-distillation/{id}/activate"
+        },
+        {
+          "method": "POST",
+          "path": "/api/agent/sales-distillation/{id}/publish"
+        },
+        {
+          "method": "POST",
+          "path": "/api/agent/sales-training"
+        },
+        {
+          "method": "PATCH",
+          "path": "/api/agent/sales-training/{id}/samples/{sampleId}"
+        },
+        {
+          "method": "POST",
+          "path": "/api/agent/sales-training/{id}/{action}"
+        },
+        {
+          "method": "POST",
+          "path": "/api/agent/skill-resources"
+        },
+        {
+          "method": "DELETE",
+          "path": "/api/agent/skill-resources/{id}"
+        },
+        {
+          "method": "PATCH",
+          "path": "/api/agent/skill-resources/{id}"
+        },
+        {
+          "method": "POST",
+          "path": "/api/agent/skill-resources/{id}/access"
+        },
+        {
+          "method": "PATCH",
+          "path": "/api/agent/skill-resources/{id}/status"
+        },
+        {
+          "method": "POST",
+          "path": "/api/agent/triggers"
+        },
+        {
+          "method": "DELETE",
+          "path": "/api/agent/triggers/{id}"
+        },
+        {
+          "method": "PATCH",
+          "path": "/api/agent/triggers/{id}"
+        },
+        {
+          "method": "POST",
+          "path": "/api/agent/triggers/{id}/{action}"
+        },
+        {
+          "method": "POST",
+          "path": "/api/agent/tuning/inspect"
+        }
+      ]
+    },
+    {
+      "family": "ai-background-research",
+      "capability": "research.background",
+      "desc": "AI 背景调研：对手/市场背景资料生成",
+      "risk": "medium",
+      "needs_approval": false,
+      "ops": [
+        {
+          "method": "POST",
+          "path": "/api/ai-background-research"
+        }
+      ]
+    },
+    {
+      "family": "case-studies",
+      "capability": "case-study.publish",
+      "desc": "成功案例：内容发布与资产",
+      "risk": "medium",
+      "needs_approval": false,
+      "ops": [
+        {
+          "method": "POST",
+          "path": "/api/case-studies"
+        },
+        {
+          "method": "PATCH",
+          "path": "/api/case-studies/{id}/publish"
+        }
+      ]
+    },
+    {
+      "family": "commission",
+      "capability": "commission.review",
+      "desc": "提成：销售记录确认/复核/锁定（资金，需审批）",
+      "risk": "high",
+      "needs_approval": true,
+      "ops": [
+        {
+          "method": "POST",
+          "path": "/api/commission/calculations/recalculate"
+        },
+        {
+          "method": "POST",
+          "path": "/api/commission/calculations/{id}/lock"
+        },
+        {
+          "method": "POST",
+          "path": "/api/commission/calculations/{id}/manual-item"
+        },
+        {
+          "method": "POST",
+          "path": "/api/commission/calculations/{id}/review"
+        },
+        {
+          "method": "POST",
+          "path": "/api/commission/calculations/{id}/unlock"
+        },
+        {
+          "method": "POST",
+          "path": "/api/commission/export"
+        },
+        {
+          "method": "POST",
+          "path": "/api/commission/products"
+        },
+        {
+          "method": "PATCH",
+          "path": "/api/commission/products/{id}"
+        },
+        {
+          "method": "POST",
+          "path": "/api/commission/products/{id}/rules"
+        },
+        {
+          "method": "PATCH",
+          "path": "/api/commission/rules/{id}"
+        },
+        {
+          "method": "POST",
+          "path": "/api/commission/sales-records"
+        },
+        {
+          "method": "POST",
+          "path": "/api/commission/sales-records/sync-from-deals"
+        },
+        {
+          "method": "PATCH",
+          "path": "/api/commission/sales-records/{id}"
+        },
+        {
+          "method": "POST",
+          "path": "/api/commission/sales-records/{id}/confirm"
+        }
+      ]
+    },
+    {
+      "family": "company-profile",
+      "capability": "profile.company",
+      "desc": "公司画像维护",
+      "risk": "medium",
+      "needs_approval": false,
+      "ops": [
+        {
+          "method": "PUT",
+          "path": "/api/company-profile"
+        }
+      ]
+    },
+    {
+      "family": "competitors",
+      "capability": "competitor.profile",
+      "desc": "竞品档案",
+      "risk": "medium",
+      "needs_approval": false,
+      "ops": [
+        {
+          "method": "POST",
+          "path": "/api/competitors"
+        },
+        {
+          "method": "PATCH",
+          "path": "/api/competitors/{id}/threat"
+        }
+      ]
+    },
+    {
+      "family": "customer-intelligence",
+      "capability": "customer.intel",
+      "desc": "客户情报：接受/拒绝富化建议",
+      "risk": "medium",
+      "needs_approval": false,
+      "ops": [
+        {
+          "method": "POST",
+          "path": "/api/customer-intelligence/{id}/accept"
+        },
+        {
+          "method": "POST",
+          "path": "/api/customer-intelligence/{id}/reject"
+        }
+      ]
+    },
+    {
+      "family": "customers",
+      "capability": "customer.manage",
+      "desc": "客户档案 CRUD",
+      "risk": "medium",
+      "needs_approval": false,
+      "ops": [
+        {
+          "method": "POST",
+          "path": "/api/customers"
+        },
+        {
+          "method": "POST",
+          "path": "/api/customers/bulk-delete"
+        },
+        {
+          "method": "PATCH",
+          "path": "/api/customers/{id}"
+        },
+        {
+          "method": "POST",
+          "path": "/api/customers/{id}/activities"
+        },
+        {
+          "method": "POST",
+          "path": "/api/customers/{id}/claim"
+        },
+        {
+          "method": "POST",
+          "path": "/api/customers/{id}/meeting-notes"
+        },
+        {
+          "method": "POST",
+          "path": "/api/customers/{id}/release"
+        }
+      ]
+    },
+    {
+      "family": "customs-documents",
+      "capability": "customs.export",
+      "desc": "报关单证导出",
+      "risk": "high",
+      "needs_approval": true,
+      "ops": [
+        {
+          "method": "POST",
+          "path": "/api/customs-documents/export"
+        }
+      ]
+    },
+    {
+      "family": "daily-reports",
+      "capability": "report.daily",
+      "desc": "日报生成/发布",
+      "risk": "medium",
+      "needs_approval": false,
+      "ops": [
+        {
+          "method": "POST",
+          "path": "/api/daily-reports"
+        },
+        {
+          "method": "POST",
+          "path": "/api/daily-reports/{id}/comments"
+        }
+      ]
+    },
+    {
+      "family": "dashboard",
+      "capability": "dashboard.batch",
+      "desc": "仪表盘优先任务批量处理",
+      "risk": "medium",
+      "needs_approval": false,
+      "ops": [
+        {
+          "method": "POST",
+          "path": "/api/dashboard/priority-tasks/batch-process"
+        }
+      ]
+    },
+    {
+      "family": "deal-recommendations",
+      "capability": "deal.recommend",
+      "desc": "商机推荐：接受/忽略",
+      "risk": "medium",
+      "needs_approval": false,
+      "ops": [
+        {
+          "method": "POST",
+          "path": "/api/deal-recommendations/{id}/dismiss"
+        },
+        {
+          "method": "POST",
+          "path": "/api/deal-recommendations/{id}/link-deal"
+        }
+      ]
+    },
+    {
+      "family": "deals",
+      "capability": "deal.manage",
+      "desc": "商机/管道 7 步履约状态机",
+      "risk": "medium",
+      "needs_approval": false,
+      "ops": [
+        {
+          "method": "POST",
+          "path": "/api/deals"
+        },
+        {
+          "method": "POST",
+          "path": "/api/deals/{dealId}/generate-customs"
+        },
+        {
+          "method": "PATCH",
+          "path": "/api/deals/{id}"
+        },
+        {
+          "method": "POST",
+          "path": "/api/deals/{id}/archive"
+        },
+        {
+          "method": "POST",
+          "path": "/api/deals/{id}/events"
+        },
+        {
+          "method": "POST",
+          "path": "/api/deals/{id}/lost"
+        },
+        {
+          "method": "PATCH",
+          "path": "/api/deals/{id}/stage"
+        }
+      ]
+    },
+    {
+      "family": "development-email",
+      "capability": "outreach.email",
+      "desc": "开发信草稿/发送（外联，需审批）",
+      "risk": "high",
+      "needs_approval": true,
+      "ops": [
+        {
+          "method": "POST",
+          "path": "/api/development-email/draft"
+        },
+        {
+          "method": "POST",
+          "path": "/api/development-email/send"
+        }
+      ]
+    },
+    {
+      "family": "document-assets",
+      "capability": "document.assets",
+      "desc": "单据素材：信头/印章/签名",
+      "risk": "high",
+      "needs_approval": true,
+      "ops": [
+        {
+          "method": "POST",
+          "path": "/api/document-assets/letterheads"
+        },
+        {
+          "method": "DELETE",
+          "path": "/api/document-assets/letterheads/{id}"
+        },
+        {
+          "method": "POST",
+          "path": "/api/document-assets/signatures"
+        },
+        {
+          "method": "DELETE",
+          "path": "/api/document-assets/signatures/{id}"
+        },
+        {
+          "method": "POST",
+          "path": "/api/document-assets/stamps"
+        },
+        {
+          "method": "DELETE",
+          "path": "/api/document-assets/stamps/{id}"
+        },
+        {
+          "method": "POST",
+          "path": "/api/document-assets/upload"
+        }
+      ]
+    },
+    {
+      "family": "document-defaults",
+      "capability": "document.defaults",
+      "desc": "单据默认模板设置",
+      "risk": "high",
+      "needs_approval": true,
+      "ops": [
+        {
+          "method": "PUT",
+          "path": "/api/document-defaults"
+        }
+      ]
+    },
+    {
+      "family": "exam-attempts",
+      "capability": "exam.submit",
+      "desc": "考试作答提交",
+      "risk": "medium",
+      "needs_approval": false,
+      "ops": [
+        {
+          "method": "PATCH",
+          "path": "/api/exam-attempts/{id}/answers"
+        },
+        {
+          "method": "POST",
+          "path": "/api/exam-attempts/{id}/submit"
+        }
+      ]
+    },
+    {
+      "family": "exam-questions",
+      "capability": "exam.questions",
+      "desc": "考题管理",
+      "risk": "high",
+      "needs_approval": true,
+      "ops": [
+        {
+          "method": "POST",
+          "path": "/api/exam-questions"
+        },
+        {
+          "method": "POST",
+          "path": "/api/exam-questions/import"
+        },
+        {
+          "method": "DELETE",
+          "path": "/api/exam-questions/{id}"
+        },
+        {
+          "method": "PATCH",
+          "path": "/api/exam-questions/{id}"
+        }
+      ]
+    },
+    {
+      "family": "exams",
+      "capability": "exam.manage",
+      "desc": "考试：组卷/发布/成绩",
+      "risk": "high",
+      "needs_approval": true,
+      "ops": [
+        {
+          "method": "POST",
+          "path": "/api/exams"
+        },
+        {
+          "method": "POST",
+          "path": "/api/exams/bulk-delete"
+        },
+        {
+          "method": "DELETE",
+          "path": "/api/exams/{id}"
+        },
+        {
+          "method": "PATCH",
+          "path": "/api/exams/{id}"
+        },
+        {
+          "method": "PATCH",
+          "path": "/api/exams/{id}/close"
+        },
+        {
+          "method": "PATCH",
+          "path": "/api/exams/{id}/publish"
+        },
+        {
+          "method": "POST",
+          "path": "/api/exams/{id}/questions"
+        },
+        {
+          "method": "POST",
+          "path": "/api/exams/{id}/questions/import"
+        },
+        {
+          "method": "POST",
+          "path": "/api/exams/{id}/start"
+        },
+        {
+          "method": "POST",
+          "path": "/api/exams/{id}/submit"
+        }
+      ]
+    },
+    {
+      "family": "import-export",
+      "capability": "data.transfer",
+      "desc": "导入导出任务",
+      "risk": "high",
+      "needs_approval": true,
+      "ops": [
+        {
+          "method": "POST",
+          "path": "/api/import-export/customers/export"
+        },
+        {
+          "method": "POST",
+          "path": "/api/import-export/customers/import"
+        },
+        {
+          "method": "POST",
+          "path": "/api/import-export/jobs"
+        }
+      ]
+    },
+    {
+      "family": "internal-messages",
+      "capability": "message.internal",
+      "desc": "站内消息",
+      "risk": "medium",
+      "needs_approval": false,
+      "ops": [
+        {
+          "method": "POST",
+          "path": "/api/internal-messages"
+        },
+        {
+          "method": "POST",
+          "path": "/api/internal-messages/system"
+        },
+        {
+          "method": "POST",
+          "path": "/api/internal-messages/{id}/read"
+        }
+      ]
+    },
+    {
+      "family": "knowledge",
+      "capability": "knowledge.manage",
+      "desc": "知识库资产/发布",
+      "risk": "high",
+      "needs_approval": true,
+      "ops": [
+        {
+          "method": "POST",
+          "path": "/api/knowledge/assets"
+        },
+        {
+          "method": "DELETE",
+          "path": "/api/knowledge/assets/{id}"
+        },
+        {
+          "method": "PATCH",
+          "path": "/api/knowledge/assets/{id}"
+        },
+        {
+          "method": "POST",
+          "path": "/api/knowledge/assets/{id}/access"
+        },
+        {
+          "method": "PATCH",
+          "path": "/api/knowledge/assets/{id}/publish"
+        }
+      ]
+    },
+    {
+      "family": "lead-finder",
+      "capability": "lead.find",
+      "desc": "线索挖掘目标解析",
+      "risk": "medium",
+      "needs_approval": false,
+      "ops": [
+        {
+          "method": "POST",
+          "path": "/api/lead-finder/free-search"
+        },
+        {
+          "method": "POST",
+          "path": "/api/lead-finder/launch"
+        },
+        {
+          "method": "POST",
+          "path": "/api/lead-finder/parse-goal"
+        },
+        {
+          "method": "POST",
+          "path": "/api/lead-finder/search"
+        }
+      ]
+    },
+    {
+      "family": "leads",
+      "capability": "lead.manage",
+      "desc": "线索 CRUD/归档/恢复/永久删除",
+      "risk": "high",
+      "needs_approval": true,
+      "ops": [
+        {
+          "method": "POST",
+          "path": "/api/leads"
+        },
+        {
+          "method": "POST",
+          "path": "/api/leads/ingest"
+        },
+        {
+          "method": "DELETE",
+          "path": "/api/leads/{id}"
+        },
+        {
+          "method": "PATCH",
+          "path": "/api/leads/{id}"
+        },
+        {
+          "method": "POST",
+          "path": "/api/leads/{id}/activities"
+        },
+        {
+          "method": "POST",
+          "path": "/api/leads/{id}/convert"
+        },
+        {
+          "method": "DELETE",
+          "path": "/api/leads/{id}/permanent"
+        },
+        {
+          "method": "POST",
+          "path": "/api/leads/{id}/restore"
+        },
+        {
+          "method": "POST",
+          "path": "/api/leads/{id}/send-email"
+        },
+        {
+          "method": "POST",
+          "path": "/api/leads/{id}/social-touch"
+        }
+      ]
+    },
+    {
+      "family": "memos",
+      "capability": "memo.manage",
+      "desc": "备忘录 CRUD/恢复/永久删除",
+      "risk": "high",
+      "needs_approval": true,
+      "ops": [
+        {
+          "method": "POST",
+          "path": "/api/memos"
+        },
+        {
+          "method": "DELETE",
+          "path": "/api/memos/{id}"
+        },
+        {
+          "method": "PATCH",
+          "path": "/api/memos/{id}"
+        },
+        {
+          "method": "DELETE",
+          "path": "/api/memos/{id}/permanent"
+        },
+        {
+          "method": "POST",
+          "path": "/api/memos/{id}/restore"
+        }
+      ]
+    },
+    {
+      "family": "plan-tasks",
+      "capability": "plan.task",
+      "desc": "计划任务管理",
+      "risk": "high",
+      "needs_approval": true,
+      "ops": [
+        {
+          "method": "POST",
+          "path": "/api/plan-tasks"
+        },
+        {
+          "method": "DELETE",
+          "path": "/api/plan-tasks/{id}"
+        },
+        {
+          "method": "PATCH",
+          "path": "/api/plan-tasks/{id}"
+        },
+        {
+          "method": "POST",
+          "path": "/api/plan-tasks/{id}/cancel"
+        },
+        {
+          "method": "POST",
+          "path": "/api/plan-tasks/{id}/complete"
+        },
+        {
+          "method": "POST",
+          "path": "/api/plan-tasks/{id}/reschedule"
+        }
+      ]
+    },
+    {
+      "family": "plan-templates",
+      "capability": "plan.template",
+      "desc": "计划模板",
+      "risk": "high",
+      "needs_approval": true,
+      "ops": [
+        {
+          "method": "POST",
+          "path": "/api/plan-templates"
+        },
+        {
+          "method": "DELETE",
+          "path": "/api/plan-templates/{id}"
+        },
+        {
+          "method": "PATCH",
+          "path": "/api/plan-templates/{id}"
+        }
+      ]
+    },
+    {
+      "family": "problems",
+      "capability": "problem.track",
+      "desc": "问题/风险记录",
+      "risk": "high",
+      "needs_approval": true,
+      "ops": [
+        {
+          "method": "POST",
+          "path": "/api/problems"
+        },
+        {
+          "method": "DELETE",
+          "path": "/api/problems/{id}"
+        },
+        {
+          "method": "PATCH",
+          "path": "/api/problems/{id}"
+        },
+        {
+          "method": "PATCH",
+          "path": "/api/problems/{id}/status"
+        }
+      ]
+    },
+    {
+      "family": "prospect-agent-jobs",
+      "capability": "prospect.job",
+      "desc": "拓客 Agent 任务重试/取消",
+      "risk": "medium",
+      "needs_approval": false,
+      "ops": [
+        {
+          "method": "POST",
+          "path": "/api/prospect-agent-jobs/{id}/cancel"
+        },
+        {
+          "method": "POST",
+          "path": "/api/prospect-agent-jobs/{id}/retry"
+        }
+      ]
+    },
+    {
+      "family": "prospect-list",
+      "capability": "prospect.list",
+      "desc": "潜客列表：触达/开发信/打分（含外联）",
+      "risk": "high",
+      "needs_approval": true,
+      "ops": [
+        {
+          "method": "PATCH",
+          "path": "/api/prospect-list/batch"
+        },
+        {
+          "method": "GET",
+          "path": "/api/prospect-list/website-probe/capability"
+        },
+        {
+          "method": "POST",
+          "path": "/api/prospect-list/{id}/contact-enrichment"
+        },
+        {
+          "method": "PATCH",
+          "path": "/api/prospect-list/{id}/details"
+        },
+        {
+          "method": "POST",
+          "path": "/api/prospect-list/{id}/follow-up"
+        },
+        {
+          "method": "GET",
+          "path": "/api/prospect-list/{id}/identity-bootstrap"
+        },
+        {
+          "method": "POST",
+          "path": "/api/prospect-list/{id}/identity-bootstrap"
+        },
+        {
+          "method": "POST",
+          "path": "/api/prospect-list/{id}/identity-bootstrap/discover"
+        },
+        {
+          "method": "GET",
+          "path": "/api/prospect-list/{id}/identity-bootstrap/{attemptId}"
+        },
+        {
+          "method": "POST",
+          "path": "/api/prospect-list/{id}/identity-bootstrap/{attemptId}/reconcile"
+        },
+        {
+          "method": "POST",
+          "path": "/api/prospect-list/{id}/qualification/channel"
+        },
+        {
+          "method": "POST",
+          "path": "/api/prospect-list/{id}/qualification/company"
+        },
+        {
+          "method": "POST",
+          "path": "/api/prospect-list/{id}/qualification/contactability/evaluate"
+        },
+        {
+          "method": "POST",
+          "path": "/api/prospect-list/{id}/qualification/contactability/{decisionId}/approve"
+        },
+        {
+          "method": "POST",
+          "path": "/api/prospect-list/{id}/qualification/icp"
+        },
+        {
+          "method": "POST",
+          "path": "/api/prospect-list/{id}/qualification/icp/{assessmentId}/approve"
+        },
+        {
+          "method": "POST",
+          "path": "/api/prospect-list/{id}/qualification/suppress"
+        },
+        {
+          "method": "POST",
+          "path": "/api/prospect-list/{id}/replies"
+        },
+        {
+          "method": "POST",
+          "path": "/api/prospect-list/{id}/send-development-email"
+        },
+        {
+          "method": "POST",
+          "path": "/api/prospect-list/{id}/touchpoints"
+        },
+        {
+          "method": "POST",
+          "path": "/api/prospect-list/{id}/website-probe"
+        },
+        {
+          "method": "GET",
+          "path": "/api/prospect-list/{id}/website-probe/{attemptId}"
+        }
+      ]
+    },
+    {
+      "family": "prospect-runs",
+      "capability": "prospect.run",
+      "desc": "拓客批次导入",
+      "risk": "medium",
+      "needs_approval": false,
+      "ops": [
+        {
+          "method": "POST",
+          "path": "/api/prospect-runs/{id}/import-pending"
+        }
+      ]
+    },
+    {
+      "family": "prospect-schedules",
+      "capability": "prospect.schedule",
+      "desc": "拓客排程暂停/恢复/删除",
+      "risk": "high",
+      "needs_approval": true,
+      "ops": [
+        {
+          "method": "DELETE",
+          "path": "/api/prospect-schedules/{id}"
+        },
+        {
+          "method": "POST",
+          "path": "/api/prospect-schedules/{id}/pause"
+        },
+        {
+          "method": "POST",
+          "path": "/api/prospect-schedules/{id}/resume"
+        }
+      ]
+    },
+    {
+      "family": "prospect-strategies",
+      "capability": "prospect.strategy",
+      "desc": "拓客策略生成",
+      "risk": "medium",
+      "needs_approval": false,
+      "ops": [
+        {
+          "method": "POST",
+          "path": "/api/prospect-strategies/{id}/schedules"
+        }
+      ]
+    },
+    {
+      "family": "prospect-strategy-suggestions",
+      "capability": "prospect.suggest",
+      "desc": "策略建议接受/拒绝",
+      "risk": "medium",
+      "needs_approval": false,
+      "ops": [
+        {
+          "method": "POST",
+          "path": "/api/prospect-strategy-suggestions/{id}/accept"
+        },
+        {
+          "method": "POST",
+          "path": "/api/prospect-strategy-suggestions/{id}/reject"
+        }
+      ]
+    },
+    {
+      "family": "prospect-super-search",
+      "capability": "prospect.search",
+      "desc": "超级搜索预览/暂停/恢复/取消",
+      "risk": "medium",
+      "needs_approval": false,
+      "ops": [
+        {
+          "method": "POST",
+          "path": "/api/prospect-super-search"
+        },
+        {
+          "method": "POST",
+          "path": "/api/prospect-super-search/preview"
+        },
+        {
+          "method": "POST",
+          "path": "/api/prospect-super-search/{id}/cancel"
+        },
+        {
+          "method": "POST",
+          "path": "/api/prospect-super-search/{id}/import-pending"
+        },
+        {
+          "method": "POST",
+          "path": "/api/prospect-super-search/{id}/pause"
+        },
+        {
+          "method": "POST",
+          "path": "/api/prospect-super-search/{id}/resume"
+        }
+      ]
+    },
+    {
+      "family": "reminders",
+      "capability": "reminder.run",
+      "desc": "提醒规则运行/启停",
+      "risk": "medium",
+      "needs_approval": false,
+      "ops": [
+        {
+          "method": "POST",
+          "path": "/api/reminders"
+        },
+        {
+          "method": "PATCH",
+          "path": "/api/reminders/{id}"
+        },
+        {
+          "method": "POST",
+          "path": "/api/reminders/{id}/run"
+        },
+        {
+          "method": "POST",
+          "path": "/api/reminders/{id}/toggle"
+        }
+      ]
+    },
+    {
+      "family": "reports",
+      "capability": "report.executive",
+      "desc": "高管报表批注",
+      "risk": "medium",
+      "needs_approval": false,
+      "ops": [
+        {
+          "method": "PATCH",
+          "path": "/api/reports/executive/note"
+        }
+      ]
+    },
+    {
+      "family": "system-settings",
+      "capability": "system.settings",
+      "desc": "系统/团队设置（治理，需审批）",
+      "risk": "high",
+      "needs_approval": true,
+      "ops": [
+        {
+          "method": "PUT",
+          "path": "/api/system-settings"
+        }
+      ]
+    },
+    {
+      "family": "todos",
+      "capability": "todo.manage",
+      "desc": "待办归档/恢复/删除",
+      "risk": "high",
+      "needs_approval": true,
+      "ops": [
+        {
+          "method": "POST",
+          "path": "/api/todos"
+        },
+        {
+          "method": "POST",
+          "path": "/api/todos/archive-due"
+        },
+        {
+          "method": "POST",
+          "path": "/api/todos/reorder"
+        },
+        {
+          "method": "DELETE",
+          "path": "/api/todos/{id}"
+        },
+        {
+          "method": "PATCH",
+          "path": "/api/todos/{id}"
+        },
+        {
+          "method": "POST",
+          "path": "/api/todos/{id}/complete"
+        },
+        {
+          "method": "POST",
+          "path": "/api/todos/{id}/restore"
+        }
+      ]
+    },
+    {
+      "family": "tools",
+      "capability": "tool.run",
+      "desc": "工具台：OCR/工具任务",
+      "risk": "high",
+      "needs_approval": true,
+      "ops": [
+        {
+          "method": "POST",
+          "path": "/api/tools/ocr/batches"
+        },
+        {
+          "method": "DELETE",
+          "path": "/api/tools/ocr/batches/{batchId}"
+        },
+        {
+          "method": "DELETE",
+          "path": "/api/tools/ocr/jobs/{id}/image"
+        },
+        {
+          "method": "POST",
+          "path": "/api/tools/ocr/jobs/{id}/image"
+        },
+        {
+          "method": "POST",
+          "path": "/api/tools/ocr/jobs/{id}/recognize"
+        },
+        {
+          "method": "POST",
+          "path": "/api/tools/ocr/jobs/{id}/recognize-image"
+        },
+        {
+          "method": "POST",
+          "path": "/api/tools/ocr/jobs/{id}/sync-lead"
+        },
+        {
+          "method": "PATCH",
+          "path": "/api/tools/product-categories"
+        },
+        {
+          "method": "POST",
+          "path": "/api/tools/product-categories"
+        },
+        {
+          "method": "DELETE",
+          "path": "/api/tools/product-categories/{name}"
+        },
+        {
+          "method": "POST",
+          "path": "/api/tools/products"
+        },
+        {
+          "method": "DELETE",
+          "path": "/api/tools/products/{id}"
+        },
+        {
+          "method": "POST",
+          "path": "/api/tools/shipments"
+        },
+        {
+          "method": "POST",
+          "path": "/api/tools/shipments/ocr"
+        },
+        {
+          "method": "POST",
+          "path": "/api/tools/shipments/sync-all"
+        },
+        {
+          "method": "DELETE",
+          "path": "/api/tools/shipments/{id}"
+        },
+        {
+          "method": "POST",
+          "path": "/api/tools/shipments/{id}/sync"
+        },
+        {
+          "method": "POST",
+          "path": "/api/tools/website-scrape/preview"
+        },
+        {
+          "method": "POST",
+          "path": "/api/tools/website-scrape/sync-opportunities"
+        }
+      ]
+    },
+    {
+      "family": "trade-document-imports",
+      "capability": "trade-doc.import",
+      "desc": "单证导入任务",
+      "risk": "high",
+      "needs_approval": true,
+      "ops": [
+        {
+          "method": "POST",
+          "path": "/api/trade-document-imports/analyze"
+        },
+        {
+          "method": "DELETE",
+          "path": "/api/trade-document-imports/{id}"
+        },
+        {
+          "method": "POST",
+          "path": "/api/trade-document-imports/{id}/confirm"
+        }
+      ]
+    },
+    {
+      "family": "trade-documents",
+      "capability": "trade-doc.generate",
+      "desc": "成套单证：预览/导出/修订/提审/批准（资金法务，需审批）",
+      "risk": "high",
+      "needs_approval": true,
+      "ops": [
+        {
+          "method": "POST",
+          "path": "/api/trade-documents"
+        },
+        {
+          "method": "PATCH",
+          "path": "/api/trade-documents/{id}"
+        },
+        {
+          "method": "POST",
+          "path": "/api/trade-documents/{id}/approve"
+        },
+        {
+          "method": "POST",
+          "path": "/api/trade-documents/{id}/convert"
+        },
+        {
+          "method": "PATCH",
+          "path": "/api/trade-documents/{id}/excel-options"
+        },
+        {
+          "method": "POST",
+          "path": "/api/trade-documents/{id}/export"
+        },
+        {
+          "method": "POST",
+          "path": "/api/trade-documents/{id}/export-xlsx"
+        },
+        {
+          "method": "POST",
+          "path": "/api/trade-documents/{id}/preview-xlsx"
+        },
+        {
+          "method": "POST",
+          "path": "/api/trade-documents/{id}/reject"
+        },
+        {
+          "method": "POST",
+          "path": "/api/trade-documents/{id}/revision"
+        },
+        {
+          "method": "POST",
+          "path": "/api/trade-documents/{id}/send"
+        },
+        {
+          "method": "POST",
+          "path": "/api/trade-documents/{id}/submit-approval"
+        }
+      ]
+    },
+    {
+      "family": "wecom",
+      "capability": "wecom.message",
+      "desc": "企业微信消息归档",
+      "risk": "high",
+      "needs_approval": true,
+      "ops": [
+        {
+          "method": "POST",
+          "path": "/api/wecom/commands/{callbackPublicId}"
+        },
+        {
+          "method": "POST",
+          "path": "/api/wecom/messages/{id}/archive"
+        }
+      ]
+    },
+    {
+      "family": "wecom-command",
+      "capability": "wecom.command",
+      "desc": "企业微信端点启用/停用（外联，需审批）",
+      "risk": "high",
+      "needs_approval": true,
+      "ops": [
+        {
+          "method": "DELETE",
+          "path": "/api/wecom-command/bindings/{id}"
+        },
+        {
+          "method": "POST",
+          "path": "/api/wecom-command/endpoints/{id}/disable"
+        }
+      ]
+    },
+    {
+      "family": "whatsapp",
+      "capability": "whatsapp.manage",
+      "desc": "WhatsApp 客户绑定/消息读取/翻译/删除（外联，需审批）",
+      "risk": "high",
+      "needs_approval": true,
+      "ops": [
+        {
+          "method": "POST",
+          "path": "/api/whatsapp/customers/{customerId}/binding"
+        },
+        {
+          "method": "POST",
+          "path": "/api/whatsapp/customers/{customerId}/messages"
+        },
+        {
+          "method": "POST",
+          "path": "/api/whatsapp/customers/{customerId}/read"
+        },
+        {
+          "method": "DELETE",
+          "path": "/api/whatsapp/messages/{id}"
+        },
+        {
+          "method": "POST",
+          "path": "/api/whatsapp/messages/{id}/translate"
+        }
+      ]
+    }
+  ]
+}

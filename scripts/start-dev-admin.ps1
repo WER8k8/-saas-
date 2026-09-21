@@ -223,6 +223,45 @@ if (-not $needBackend -and -not (Test-EgressSuppliersRoute $ApiPort)) {
   $needBackend = $true
 }
 
+# ── Redis@6379（2026-09-20 实测补齐）────────────────────────────────────────
+# 为什么这里必须要有 Redis：
+#   dev-backend-bootstrap.ps1 会把整份 config/dev/.env 灌进进程环境变量，
+#   其中包含 REDIS_ENABLED=true；而 config.py 的「开发环境自动降级 Redis」
+#   只在 os.getenv("REDIS_ENABLED") 为 None 时才生效（config.py:892-896）。
+#   两件事叠加 => Redis 没起时后端不会降级，而是在 app/core/jwt_key_rotation.py
+#   的导入期被连接超时拖死，整个 uvicorn 起不来（所有端点 000）。
+#   因此先把 Redis 拉起来，再启后端；Redis 仍然起不来时后端可降级运行。
+function Test-TcpPortLocal([int]$port) {
+  try {
+    $client = New-Object System.Net.Sockets.TcpClient('127.0.0.1', $port)
+    $client.Close()
+    return $true
+  } catch {
+    return $false
+  }
+}
+
+$RedisPort = 6379
+$RedisExe = Join-Path (Split-Path -Parent $Root) 'tools\redis\redis-server.exe'
+if (Test-TcpPortLocal $RedisPort) {
+  Write-Host "Redis up on :$RedisPort" -ForegroundColor Green
+} elseif (Test-Path -LiteralPath $RedisExe) {
+  Write-Host "Starting Redis on :$RedisPort" -ForegroundColor Cyan
+  Start-Process -FilePath $RedisExe -WorkingDirectory (Split-Path $RedisExe) -WindowStyle Minimized
+  $redisDeadline = (Get-Date).AddSeconds(20)
+  while ((Get-Date) -lt $redisDeadline) {
+    Start-Sleep -Milliseconds 500
+    if (Test-TcpPortLocal $RedisPort) { break }
+  }
+  if (Test-TcpPortLocal $RedisPort) {
+    Write-Host "Redis ready on :$RedisPort" -ForegroundColor Green
+  } else {
+    Write-Host "WARN Redis not listening on :$RedisPort - backend will run degraded" -ForegroundColor Yellow
+  }
+} else {
+  Write-Host "WARN redis-server.exe not found: $RedisExe" -ForegroundColor Yellow
+}
+
 if ($needBackend) {
   Write-Host "Starting backend on :$ApiPort" -ForegroundColor Cyan
   $bootArgs = @(

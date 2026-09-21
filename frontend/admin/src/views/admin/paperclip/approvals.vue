@@ -20,7 +20,7 @@
               <span class="approval-time">{{ formatTime(item.created_at) }}</span>
             </div>
             <div class="approval-agent">
-              <span class="agent-icon">🤖</span>
+              <span class="agent-icon">A</span>
               <span class="agent-name">{{ item.agent_name }}</span>
             </div>
             <div class="approval-content">

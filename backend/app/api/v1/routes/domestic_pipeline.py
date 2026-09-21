@@ -15,7 +15,7 @@ from fastapi import APIRouter, Depends, Query
 from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 
-from app.api.deps import get_db
+from app.db.session import get_db
 from app.core.response import success_response
 from app.services.domestic import (
     DomesticInquiryService,

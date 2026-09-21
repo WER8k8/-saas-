@@ -26,6 +26,7 @@ export const CLIENT_SHELL_MENU: ProShellMenuGroup[] = [
   {
     title: '经营总览',
     children: [
+      { name: 'ClientToday', path: '/client/today', title: '今日三步', icon: 'ThunderboltOutlined' },
       { name: 'ClientDashboard', path: '/client/dashboard', title: '概览', icon: 'DashboardOutlined' },
       { name: 'ClientTrafficBoard', path: '/client/traffic', title: '流量看板', icon: 'LineChartOutlined' },
       { name: 'ClientOnboarding', path: '/client/onboarding', title: '开通向导', icon: 'CarryOutOutlined' },
@@ -42,6 +43,7 @@ export const CLIENT_SHELL_MENU: ProShellMenuGroup[] = [
       { name: 'ClientInquiryQueue', path: '/client/queues/inquiries', title: '询盘队列', icon: 'OrderedListOutlined' },
       { name: 'ClientEmailCampaigns', path: '/client/email-campaigns', title: '邮件营销', icon: 'MailOutlined' },
       { name: 'ClientTradeTools', path: '/client/trade-tools', title: '外贸工具指南', icon: 'QuestionCircleOutlined' },
+      { name: 'ClientForeignTradeTeam', path: '/client/foreign-trade-team', title: 'AI 外贸团队', icon: 'TeamOutlined' },
       { name: 'ClientReferral', path: '/client/referral', title: '邀请好友', icon: 'TeamOutlined' },
     ],
   },
@@ -62,6 +64,26 @@ export const CLIENT_SHELL_MENU: ProShellMenuGroup[] = [
     ],
   },
   {
+    title: '视频与创意',
+    children: [
+      { name: 'ClientVideoStudio', path: '/client/video-studio', title: '视频工作室', icon: 'VideoCameraOutlined' },
+      { name: 'ClientVideoOverseas', path: '/client/video-overseas', title: '出海视频', icon: 'GlobalOutlined' },
+      { name: 'ClientTemplatesExplore', path: '/client/explore', title: '创意社区模板', icon: 'AppstoreOutlined' },
+      { name: 'ClientSkillsMarket', path: '/client/skills', title: '专属技能', icon: 'ThunderboltOutlined' },
+      { name: 'ClientPluginMarket', path: '/client/plugin-market', title: '旺财插件市场', icon: 'AppstoreOutlined' },
+      { name: 'ClientProductCandidates', path: '/client/product-candidates', title: '选品候选', icon: 'ShoppingOutlined' },
+    ],
+  },
+  {
+    title: 'AI 协同',
+    children: [
+      { name: 'ClientAssistant', path: '/client/assistant', title: '卖货智能助手', icon: 'RobotOutlined' },
+      { name: 'ClientCopilot', path: '/client/copilot', title: '卖货飞轮', icon: 'NodeIndexOutlined' },
+      { name: 'ClientGeoVisibility', path: '/client/geo-visibility', title: 'GEO 可见性', icon: 'SearchOutlined' },
+      { name: 'ClientChuhaijiApp', path: '/client/app', title: '出海计应用', icon: 'MobileOutlined' },
+    ],
+  },
+  {
     title: '履约与账户',
     children: [
       { name: 'ClientFulfillmentQueue', path: '/client/queues/fulfillment', title: '履约队列', icon: 'CarryOutOutlined' },
@@ -71,6 +93,7 @@ export const CLIENT_SHELL_MENU: ProShellMenuGroup[] = [
       { name: 'ClientInvoices', path: '/client/invoices', title: '开票申请', icon: 'FileTextOutlined' },
       { name: 'ClientTokens', path: '/client/tokens', title: 'AI 流量充值', icon: 'ThunderboltOutlined' },
       { name: 'ClientEgress', path: '/client/egress', title: '出口 IP', icon: 'GlobalOutlined' },
+      { name: 'ClientPlanGate', path: '/client/plan-gate', title: '套餐门槛', icon: 'SafetyCertificateOutlined' },
       { name: 'ClientSettings', path: '/client/settings', title: '系统设置', icon: 'SettingOutlined' },
     ],
   },

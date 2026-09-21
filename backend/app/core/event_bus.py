@@ -161,6 +161,15 @@ class EventTypes:
     SYSTEM_WARNING = "system.warning"
     QUOTA_EXCEEDED = "quota.exceeded"
     CREDIT_LOW = "credit.low"
+    # WhatsApp 通道事件（入站事件总线 · Plugin→核心后端）
+    WHATSAPP_MESSAGE_RECEIVED = "whatsapp.message.received"
+    WHATSAPP_MESSAGE_SENT = "whatsapp.message.sent"
+    WHATSAPP_MESSAGE_FAILED = "whatsapp.message.failed"
+    WHATSAPP_MESSAGE_ACK = "whatsapp.message.ack"
+    WHATSAPP_CONNECTION_STATE = "whatsapp.connection.state"
+    # Browser 证据分析事件
+    EVIDENCE_ANALYZED = "browser.evidence.analyzed"
+    EVIDENCE_ANOMALY = "browser.evidence.anomaly"
 
 
 class EventBus:

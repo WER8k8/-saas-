@@ -17,6 +17,8 @@ import './styles/shell-motion.scss';
 import './styles/motion-v4-macaron.scss';
 import './styles/coachpro-tertiary-pages.scss';
 import './styles/admin-2026-global.scss';
+/** 全套专业化层：壳层材质/清新文字/滚动条/按压/交错/路由软转场 */
+import './styles/admin-pro-suite.scss';
 import './styles/login-slide-trae.css';
 import './style.css';
 import App from './App.vue';

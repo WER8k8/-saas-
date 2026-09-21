@@ -18,6 +18,7 @@ JWT 密钥轮换服务
 """
 
 import json
+import logging
 import os
 import secrets
 import time
@@ -35,6 +36,8 @@ JWT_KEY_PREFIX = "jwt:keys:"
 JWT_CURRENT_KEY_ID_KEY = "jwt:current_key_id"
 JWT_KEY_ROTATION_CONFIG = "jwt:rotation_config"
 
+logger = logging.getLogger(__name__)
+
 
 class JWTKeyRotationService:
     def __init__(self):
@@ -47,7 +50,38 @@ class JWTKeyRotationService:
         self._redis = redis_client
         self._use_redis = settings.REDIS_ENABLED and self._redis is not None
         self._dev_key_file = Path(__file__).resolve().parents[2] / "logs" / "jwt-rotation-keys.json"
+        self._probe_redis()
         self._ensure_keys_exist()
+
+    def _probe_redis(self) -> None:
+        """连通性自检：配置了 Redis 但连不上时，必须降级到文件模式。
+
+        背景（2026-09-20 实测）：本模块在 **app 导入期** 就被实例化（见文件末行
+        `jwt_key_rotation_service = JWTKeyRotationService()`）。此前
+        `_ensure_keys_exist` 是裸调用 `self._redis.get(...)` 且没有任何兜底，
+        一旦 Redis 不可达（服务没起 / 端口未监听 / 连接慢）即抛出
+        `redis.exceptions.TimeoutError`，直接炸掉 `import app.main`，
+        导致整个后端起不来 —— 表现为所有端点（含登录）全线 000/502。
+
+        因此这里做一次带短超时的 ping：失败就把 `_use_redis` 置 False，
+        改走已有的 `_dev_key_file` 文件模式分支，保证
+        「Redis 挂了，应用照样能起来」。
+        """
+        if not self._use_redis:
+            return
+        try:
+            ping = getattr(self._redis, "ping", None)
+            if ping is None:
+                self._use_redis = False
+                return
+            ping()
+        except Exception as exc:
+            logger.warning(
+                "[jwt-key-rotation] Redis 不可达(%s: %s)，降级为文件模式密钥存储",
+                type(exc).__name__,
+                exc,
+            )
+            self._use_redis = False
 
     def _ensure_keys_exist(self):
         """_ensure_keys_exist。
@@ -57,10 +91,20 @@ class JWTKeyRotationService:
         :return: 返回处理结果。
         """
         if self._use_redis:
-            current_id = self._redis.get(JWT_CURRENT_KEY_ID_KEY)
-            if not current_id:
+            try:
+                current_id = self._redis.get(JWT_CURRENT_KEY_ID_KEY)
+            except Exception as exc:
+                # 导入期不容许把进程拖死：探测已过的极端情况下仍可能在这里失败
+                logger.warning(
+                    "[jwt-key-rotation] 读取 Redis 密钥失败(%s: %s)，降级为文件模式",
+                    type(exc).__name__,
+                    exc,
+                )
+                self._use_redis = False
+                current_id = None
+            if current_id is None and self._use_redis:
                 self._bootstrap_redis_keys()
-        else:
+        if not self._use_redis:
             if not self._dev_key_file.exists():
                 self._bootstrap_dev_keys()
 

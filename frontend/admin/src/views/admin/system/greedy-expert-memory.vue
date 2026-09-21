@@ -140,7 +140,7 @@
         <a-divider>ECC 技能体系</a-divider>
         <a-card size="small" class="ecc-card">
           <div class="ecc-header">
-            <span class="ecc-logo">⚡</span>
+            <span class="ecc-logo">E</span>
             <span class="ecc-title">Everything Claude Code</span>
             <span class="ecc-subtitle">— 36个专用子智能体 · 271+个技能模块 · 92+个命令</span>
           </div>

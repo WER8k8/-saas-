@@ -2263,7 +2263,6 @@ function exportOutreachCsv() {
     padding: 4px 0;
     font-size: 12px;
   }
-}
   .acq-nodes { grid-template-columns: 1fr 1fr; }
   .acq-follow { padding: 10px; }
 }

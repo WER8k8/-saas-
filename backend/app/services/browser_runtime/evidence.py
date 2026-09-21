@@ -221,6 +221,28 @@ def persist_evidence(
     if task_id:
         record["_task_id"] = task_id
 
+    def _run_analysis() -> None:
+        """可选自动分析（管道闭环）：默认开启，失败不阻断。"""
+        try:
+            if os.environ.get("EVIDENCE_AUTO_ANALYZE", "1") in {"0", "false", "False", "no"}:
+                return
+            from app.services.browser_runtime.evidence_analyzer import evidence_analyzer
+
+            analysis = evidence_analyzer.analyze_and_emit(
+                evidence,
+                tenant_id=str(evidence.tenant_id or ""),
+                source="persist_evidence",
+            )
+            result["analysis"] = {
+                "has_anomaly": analysis.get("has_anomaly"),
+                "max_severity": analysis.get("max_severity"),
+                "finding_count": len(analysis.get("findings") or []),
+                "compliance_ok": analysis.get("compliance_ok"),
+            }
+        except Exception as exc:  # noqa: BLE001
+            result["analysis_error"] = str(exc)[:200]
+            log.warning("persist_evidence: 自动分析失败（不阻断） %s", exc)
+
     # 1) 集中落盘（JSONL 审计，append-only）
     try:
         tenant = str(evidence.tenant_id or "global")
@@ -239,6 +261,7 @@ def persist_evidence(
     # 2) 入库：复用 task_traces.artifacts（已存在的 JSON 列，无需迁移）
     if db is None:
         result["db_reason"] = "no_db"
+        _run_analysis()
         return result
 
     try:
@@ -249,10 +272,12 @@ def persist_evidence(
         insp = sa_inspect(db.bind)
         if not insp.has_table("task_traces"):
             result["db_reason"] = "table_missing"
+            _run_analysis()
             return result
         cols = [c["name"] for c in insp.get_columns("task_traces")]
         if "artifacts" not in cols:
             result["db_reason"] = "artifacts_column_missing"
+            _run_analysis()
             return result
 
         row = None
@@ -268,6 +293,7 @@ def persist_evidence(
             row.artifacts = current
             db.commit()
             result["db"] = True
+            _run_analysis()
             return result
 
         # 无 task_id（或找不到对应 trace）→ 新建一条独立 trace 承载证据，
@@ -307,4 +333,5 @@ def persist_evidence(
         except Exception:  # noqa: BLE001
             pass
 
+    _run_analysis()
     return result
