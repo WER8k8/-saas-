@@ -37,7 +37,7 @@ opentelemetry-instrumentation-redis>=0.65b0,<1
 # LangChain (replaces deprecated langchain==0.1.10)
 langchain-core>=0.3.85,<1.0.0
 langchain-community>=0.3.27
-langchain-openai>=1.1.14,<2.0
+langchain-openai>=0.3.0,<0.4
 langchain-text-splitters>=0.3.9
 langsmith>=0.8.0
 
@@ -84,4 +84,3 @@ edge-tts>=7.2.7
 # CSV 走标准库 csv；图片/扫描件 OCR/VLM 未配置时保持诚实 503，不引入伪造抽取
 pypdf>=5.0.0,<7
 openpyxl>=3.1.0
-
